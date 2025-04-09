@@ -1,0 +1,40 @@
+﻿@model IEnumerable<TaskItem>
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <title>Менеджер задач</title>
+    <link href="~/css/tasksGrid.css" rel="stylesheet" />
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+<body>
+    <div id="gridContent">
+        <div class="grid-container">
+            @foreach (var task in Model)
+            {
+                <div class="task">
+                    <div class="icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="text-content">
+                        <h3 class="title">@task.TaskTitle</h3>
+                    </div>
+                    <div class="task-status">
+                        <label class="switch">
+                            <input type="checkbox"
+                                   data-task-id="@task.Id"
+                                   class="status-toggle"
+                            @(task.IsClosed ? "checked" : "") />
+                            <span class="slider round"></span>
+                        </label>
+                        <span>@(task.IsClosed ? "Завершена" : "Активна")</span>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+    <script src="~/js/grid.js" asp-append-version="true"></script>
+</body>
+</html>

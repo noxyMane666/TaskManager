@@ -1,0 +1,91 @@
+## Build results
+bin/
+obj/
+out/
+
+## User-specific files
+*.user
+*.userosscache
+*.suo
+*.sln.docstates
+
+## Visual Studio cache files
+.vs/
+*.vc.db
+*.vsp
+*.vssscc
+*.vspscc
+
+## ASP.NET Scaffolding
+ScaffoldingReadMe.txt
+
+## Azure Web Apps log files
+**/App_Data/Logs/
+
+## Visual Studio Code
+.vscode/
+
+## Rider IDE
+.idea/
+
+## Resharper
+*.DotSettings.user
+_ReSharper*/
+*.[Rr]e[Ss]harper
+
+## DotCover
+*.dotCover
+
+## NuGet
+*.nupkg
+*.snupkg
+**/packages/*
+!**/packages/build/
+!**/packages/repositories.config
+.nuget/
+
+## Build directories from MSBuild
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+## Logs
+*.log
+
+## Temporary files
+*.tmp
+*.temp
+
+## Web publish
+publish/
+*.Publish.xml
+
+## IIS Express
+.vsconfig
+*.vsidx
+.vspscc
+*.dbmdl
+*.dbproj.schemaview
+
+## Others
+TestResults/
+*.cache
+*.pdb
+*.mdb
+*.pidb
+
+## Environment-specific
+.env
+.env.*
+
+## Backup & autosave
+*~ 
+*.bak
+*.swp
+*.swo
+
+## Rider stuff
+.idea/
+
+##setting
+appsettings.json

@@ -1,0 +1,72 @@
+﻿<div id="content">
+    <div class="service-container">
+        <div class="service">
+            <div class="icon"><i class="fas fa-tasks"></i></div>
+            <div class="text-content">
+                <h3 class="title">Мои задачи</h3>
+                <p class="description">Просмотр и управление текущими задачами</p>
+            </div>
+            <button class="action-btn" id="current-task-button">
+                <i class="fas fa-arrow-right"></i>
+            </button>
+        </div>
+
+        <div class="service">
+            <div class="icon"><i class="fas fa-plus-circle"></i></div>
+            <div class="text-content">
+                <h3 class="title">Добавить задачу</h3>
+                <p class="description">Создание новой задачи в список</p>
+            </div>
+            <button class="action-btn" id="new-task-button">
+                <i class="fas fa-arrow-right"></i>
+            </button>
+        </div>
+
+        <div class="service">
+            <div class="icon"><i class="fas fa-archive"></i></div>
+            <div class="text-content">
+                <h3 class="title">Архив задач</h3>
+                <p class="description">Просмотр завершенных задач</p>
+            </div>
+            <button class="action-btn" id="closed-task-button">
+                <i class="fas fa-arrow-right"></i>
+            </button>
+        </div>
+    </div>
+</div>
+<div id="taskModal" class="modal-wrapper" style="display: none">
+    <div class="modal-container">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Добавить новую задачу</h3>
+                <span class="modal-close"><i class="fas fa-times"></i></span>
+            </div>
+            <div class="modal-body">
+                <label class="input-label" for="taskTitle">Описание задачи</label>
+                <input type="text" id="taskTitle" />
+                <label class="input-label" for="taskInput">Текст задачи</label>
+                <textarea id="taskInput"></textarea>
+            </div>
+            <div class="modal-footer">
+                <button id="cancelBtn" class="btn-cancel">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <button id="submitBtn" class="btn-submit">
+                    <i class="fas fa-check"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="toastNotification"
+     class="toast position-fixed"
+     style="display: none">
+    <div class="toast-header">
+        <strong class="me-auto" id="toastTitle">Уведомление</strong>
+        <button type="button"
+                class="btn-close"
+                data-bs-dismiss="toast"
+                aria-label="Close"></button>
+    </div>
+    <div class="toast-body" id="toastMessage"></div>
+</div>
