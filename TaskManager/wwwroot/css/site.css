@@ -1,6 +1,11 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+
 #content {
     background-color: white;
-    width: 90%;
+    width: 100%;
     max-width: 1200px;
     height: auto;
     min-height: 80vh;

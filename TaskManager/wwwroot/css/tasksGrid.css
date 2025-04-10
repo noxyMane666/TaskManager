@@ -1,6 +1,6 @@
 ﻿#gridContent {
     background-color: white;
-    width: 90%;
+    width: 100%;
     max-width: 1600px;
     min-height: 80vh;
     padding: 30px;
@@ -123,3 +123,10 @@ input:checked + .slider {
     input:checked + .slider:before {
         transform: translateX(26px);
     }
+
+.fade-out {
+    opacity: 0;
+    transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+    transform: translateX(-20px);
+}
+

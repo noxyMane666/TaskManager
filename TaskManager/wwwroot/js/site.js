@@ -61,27 +61,6 @@ async function addUserTask() {
         });
 }
 
-async function getUserTask(isClosed) {
-    await fetch("/Grid/GetUserTasks", {
-        method: "GET",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ TaskTitle: taskTitle.value, TaskDescription: taskInput.value }),
-    })
-        .then((response) => response.json())
-        .then((success) => {
-            if (success) {
-                showToast(true, 'Успех', 'Операция выполнена успешно');
-            } else {
-                showToast(false, 'Ошибка', 'Произошла ошибка');
-            }
-        })
-        .catch((error) => {
-            console.error("Ошибка:", error);
-        });
-}
-
 buttons.forEach((button) => {
     button.addEventListener("click", function () {
         switch (this.id) {

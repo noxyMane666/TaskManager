@@ -4,7 +4,9 @@ using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using TaskManager.Data;
-using TaskManager.Models;  
+using TaskManager.DTO;
+using TaskManager.Mappers;
+using TaskManager.Models;
 
 namespace TaskManager.Controllers
 {
@@ -19,7 +21,7 @@ namespace TaskManager.Controllers
         }
 
         [HttpPost]
-        public async Task<JsonResult> AddUserTask([FromBody] TaskItem requestTask)
+        public async Task<JsonResult> AddUserTask([FromBody] TaskItemDto requestTask)
         {
             try
             {
@@ -34,7 +36,8 @@ namespace TaskManager.Controllers
                         });
                     }
 
-                    _context.Tasks.Add(requestTask);
+                    var taskModel = TaskItemMapper.ToModel(requestTask);
+                    _context.Tasks.Add(taskModel);
                     await _context.SaveChangesAsync();
 
                     return Json(new
