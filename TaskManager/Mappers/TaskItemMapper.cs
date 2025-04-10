@@ -1,4 +1,5 @@
-﻿using TaskManager.DTO;
+﻿using System.Threading.Tasks;
+using TaskManager.DTO;
 using TaskManager.Models;
 
 namespace TaskManager.Mappers
@@ -25,6 +26,33 @@ namespace TaskManager.Mappers
                 TaskDescription = model.TaskDescription,
                 IsClosed = model.IsClosed
             };
+        }
+
+        public static void MapUpdates(TaskItem model, UpdateTaskItemDto dto)
+        {
+            try
+            {
+                var dtoProps = typeof(UpdateTaskItemDto).GetProperties();
+
+                foreach (var prop in dtoProps)
+                {
+                    var dtoValue = prop.GetValue(dto);
+
+                    if (dtoValue is not null)
+                    {
+                        var modelProperty = typeof(TaskItem).GetProperty(prop.Name);
+
+                        if (modelProperty != null && modelProperty.CanWrite)
+                        {
+                            modelProperty.SetValue(model, dto);
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
     }
 }

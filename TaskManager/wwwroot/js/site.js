@@ -23,7 +23,7 @@ function closeModal() {
     taskTitle.value = "";
 };
 
-function showToast(isSuccess, title, message) {
+function showToast(title, message) {
     toastTitle.textContent = title;
     toastMessage.textContent = message;
 
@@ -43,15 +43,9 @@ async function addUserTask() {
     const title = taskTitle.value.trim();
     const description = taskInput.value.trim();
 
-    if (!title || !description) {
-        showToast(false, 'Ошибка', 'Все поля должны быть заполнены');
-        return;
-    }
+    closeModal();
 
     try {
-        console.log('Отправка задачи:', { title, description });
-        closeModal();
-
         const response = await fetch("/Home/AddUserTask", {
             method: "POST",
             headers: {
@@ -71,13 +65,13 @@ async function addUserTask() {
         const result = await response.json();
 
         if (result.success) {
-            showToast(true, 'Успех', 'Задача успешно добавлена');
+            showToast('Успех', 'Задача успешно добавлена');
         } else {
-            showToast(false, 'Ошибка', result.message || 'Не удалось добавить задачу');
+            showToast('Ошибка', result.message || 'Не удалось добавить задачу');
         }
     } catch (error) {
         console.error("Ошибка:", error);
-        showToast(false, 'Ошибка', error.message || 'Произошла непредвиденная ошибка');
+        showToast('Ошибка', error.message || 'Произошла непредвиденная ошибка');
     }
 };
 
@@ -104,7 +98,6 @@ cancelBtn.addEventListener("click", closeModal);
 submitBtn.addEventListener("click", function () {
     if (taskTitle.value.trim().length > 50) {
         showToast(
-            true,
             "Неверно заполнена форма",
             "Количество символов в описании должно быть не больше 50"
         );
@@ -115,7 +108,6 @@ submitBtn.addEventListener("click", function () {
         addUserTask();
     } else {
         showToast(
-            true,
             "Неверно заполнена форма",
             "Количество символов должно быть не меньше 10"
         );

@@ -39,19 +39,33 @@
             }
         </div>
     </div>
-    <div class="modal-overlay" id="taskModal" style="display: none;">
+    <div id="gridTaskModal" class="modal-wrapper" style="display: none">
         <div class="modal-container">
-            <div class="modal-header">
-                <h3 class="modal-title">Детали задачи</h3>
-                <button class="modal-close">&times;</button>
-            </div>
-            <div class="modal-body">
-                <div class="modal-task-icon">
-                    <i class="fas fa-check-circle"></i>
+            <div class="service modal-service">
+                <div class="icon"><i class="fas fa-check-circle"></i></div>
+                <div class="text-content">
+                    <h3 class="title">Карточка задачи</h3>
+                    <div class="modal-inputs">
+                        <label class="input-label" for="taskTitle">Описание задачи</label>
+                        <input type="text" id="gridTaskTitle" class="modal-input"/>
+                        <label class="input-label" for="taskInput">Текст задачи</label>
+                        <textarea id="gridTaskInput" class="modal-textarea"></textarea>
+                    </div>
+                    <div class="modal-actions">
+                        <button id="cardCancelBtn" class="btn-cancel">
+                            <i class="fas fa-times"></i>
+                        </button>
+                        <button id="cardDeleteBtn" class="btn-delete">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                        <button id="cardSubmitBtn" class="btn-submit">
+                            <i class="fas fa-check"></i>
+                        </button>
+                    </div>
                 </div>
-                <div class="modal-content"></div>
             </div>
         </div>
+    </div>
     </div>
     <script src="~/js/grid.js" asp-append-version="true"></script>
 </body>

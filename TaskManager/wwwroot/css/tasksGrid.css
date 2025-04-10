@@ -38,20 +38,6 @@
         border-color: #4a6cf7;
     }
 
-.icon {
-    font-size: 28px;
-    color: #4a6cf7;
-    padding: 5px;
-    width: 60px;
-    height: 60px;
-    background: rgba(74, 108, 247, 0.1);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-}
-
 .text-content {
     flex: 1;
     margin-top: 24px;
@@ -129,4 +115,66 @@ input:checked + .slider {
     transition: opacity 0.3s ease-out, transform 0.3s ease-out;
     transform: translateX(-20px);
 }
+
+.modal-container {
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.modal-input,
+.modal-textarea {
+    width: 100%;
+    padding: 12px 15px;
+    margin-bottom: 15px;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    background: #f5f7fa;
+    font-size: 1rem;
+    color: #2c3e50;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+    .modal-input:focus,
+    .modal-textarea:focus {
+        border-color: #4a6cf7;
+        box-shadow: 0 0 0 2px rgba(74, 108, 247, 0.2);
+    }
+
+.modal-textarea {
+    min-height: 150px;
+    resize: vertical;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-start;
+    gap: 10px;
+    margin-top: 20px;
+    width: 100%;
+}
+
+.btn-delete {
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 50px;
+    height: 50px;
+    background: #4a6cf7;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+}
+
+    .btn-delete:hover {
+        background: #ff6b81;
+        transform: scale(1.1);
+    }
 

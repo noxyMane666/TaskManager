@@ -1,26 +1,34 @@
-﻿function getToggleText(boolState) {
+﻿const gridModal = document.getElementById("gridTaskModal");
+const taskCardTitle = document.getElementById("gridTaskTitle");
+const taskCardInput = document.getElementById("gridTaskInput");
+const cardSubmitBtn = document.getElementById("cardSubmitBtn");
+const cardCancelBtn = document.getElementById("cardCancelBtn");
+const cardDeleteBtn = document.getElementById("cardDeleteBtn");
+
+function getToggleText(boolState) {
     return boolState ? "Завершена" : "Активна";
 }
 
-function openTaskModal(taskElement) {
-    const modal = document.getElementById('taskModal');
-    const modalContent = document.querySelector('.modal-content');
-    const taskContent = taskElement.cloneNode(true);
+function openGridModal(taskElement) {
+    const title = taskElement.querySelector('.title').textContent;
+    const description = taskElement.querySelector('.text').value;
 
-    modalContent.innerHTML = '';
-    modalContent.appendChild(taskContent);
+    taskCardTitle.value = title;
+    taskCardInput.value = description.replace(/^"|"$/g, '');
 
-    modal.style.display = 'flex';
-    modal.querySelector('.modal-close').onclick = () => {
-        modal.style.display = 'none';
-    };
+    gridModal.style.display = "flex";
+    setTimeout(() => {
+        gridModal.classList.add("active");
+    }, 10);
+    taskCardTitle.focus();
+}
 
-    modal.onclick = function (e) {
-        if (e.target === this) {
-            modal.style.display = 'none';
-        }
-    };
-};
+function closeGridModal() {
+    gridModal.classList.remove("active");
+    setTimeout(() => {
+        gridModal.style.display = "none";
+    }, 300);
+}
 
 async function updateTaskStatus(taskId, boolState) {
     await fetch('UpdateTaskState', {
@@ -65,7 +73,44 @@ async function updateTaskStatus(taskId, boolState) {
     });
 };
 
-const toggleButtons = document.querySelectorAll('.status-toggle').forEach(toggle => {
+async function claimTaskUpdates() {
+    const title = taskCardTitle.value.trim();
+    const description = taskCardInput.value.trim();
+
+    closeGridModal();
+
+    try
+    {
+        const response = await fetch("UpdateTask", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                TaskTitle: title,
+                TaskDescription: description
+            }),
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || 'Ошибка сервера');
+        }
+
+        const result = await response.json();
+
+        if (result.success) {
+            showToast('Успех', 'Задача успешно добавлена');
+        } else {
+            showToast('Ошибка', result.message || 'Не удалось добавить задачу');
+        }
+    } catch (error) {
+        console.error("Ошибка:", error);
+        showToast('Ошибка', error.message || 'Произошла непредвиденная ошибка');
+    }
+};
+
+document.querySelectorAll('.status-toggle').forEach(toggle => {
     toggle.addEventListener('change', function () {
         const taskId = this.getAttribute('data-task-id');
         const isClosed = this.checked;
@@ -74,11 +119,30 @@ const toggleButtons = document.querySelectorAll('.status-toggle').forEach(toggle
     });
 });
 
-const taskCards = document.querySelectorAll('.task').forEach(card => {
-    card.addEventListener('click', function (e) {
-        if (!e.target.closest('.switch, .status-toggle')) {
-            openTaskModal(card);
+document.querySelectorAll('.task').forEach(task => {
+    task.addEventListener('click', function (e) {
+        if (!e.target.closest('.task-status')) {
+            openGridModal(this);
         }
-
     });
+});
+
+cardCancelBtn.addEventListener("click", closeGridModal);
+cardSubmitBtn.addEventListener("click", function () {
+    if (taskTitle.value.trim().length > 50) {
+        showToast(
+            "Неверно заполнена форма",
+            "Количество символов в описании должно быть не больше 50"
+        );
+    } else if (
+        taskCardInput.value.trim().length > 10 ||
+        taskCardTitle.value.trim().length > 10
+    ) {
+        addUserTask();
+    } else {
+        showToast(
+            "Неверно заполнена форма",
+            "Количество символов должно быть не меньше 10"
+        );
+    }
 });
