@@ -36,24 +36,24 @@
 </div>
 <div id="taskModal" class="modal-wrapper" style="display: none">
     <div class="modal-container">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>Добавить новую задачу</h3>
-                <span class="modal-close"><i class="fas fa-times"></i></span>
-            </div>
-            <div class="modal-body">
-                <label class="input-label" for="taskTitle">Описание задачи</label>
-                <input type="text" id="taskTitle" />
-                <label class="input-label" for="taskInput">Текст задачи</label>
-                <textarea id="taskInput"></textarea>
-            </div>
-            <div class="modal-footer">
-                <button id="cancelBtn" class="btn-cancel">
-                    <i class="fas fa-arrow-left"></i>
-                </button>
-                <button id="submitBtn" class="btn-submit">
-                    <i class="fas fa-check"></i>
-                </button>
+        <div class="service modal-service">
+            <div class="icon"><i class="fas fa-plus-circle"></i></div>
+            <div class="text-content">
+                <h3 class="title">Добавить новую задачу</h3>
+                <div class="modal-inputs">
+                    <label class="input-label" for="taskTitle">Описание задачи</label>
+                    <input type="text" id="taskTitle" class="modal-input" placeholder="Введите краткое описание" />
+                    <label class="input-label" for="taskInput">Текст задачи</label>
+                    <textarea id="taskInput" class="modal-textarea" placeholder="Введите подробное описание задачи"></textarea>
+                </div>
+                <div class="modal-actions">
+                    <button id="cancelBtn" class="action-btn">
+                        <i class="fas fa-times"></i>
+                    </button>
+                    <button id="submitBtn" class="action-btn">
+                        <i class="fas fa-check"></i>
+                    </button>
+                </div>
             </div>
         </div>
     </div>

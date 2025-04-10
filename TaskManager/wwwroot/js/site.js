@@ -1,7 +1,6 @@
 ﻿const buttons = document.querySelectorAll(".action-btn");
-
 const modal = document.getElementById("taskModal");
-const closeBtn = document.querySelector(".modal-close");
+
 const cancelBtn = document.getElementById("cancelBtn");
 const submitBtn = document.getElementById("submitBtn");
 const taskInput = document.getElementById("taskInput");
@@ -13,7 +12,7 @@ function openModal() {
         modal.classList.add("active");
     }, 10);
     taskInput.focus();
-}
+};
 
 function closeModal() {
     modal.classList.remove("active");
@@ -22,7 +21,7 @@ function closeModal() {
     }, 300);
     taskInput.value = "";
     taskTitle.value = "";
-}
+};
 
 function showToast(isSuccess, title, message) {
     toastTitle.textContent = title;
@@ -38,28 +37,49 @@ function showToast(isSuccess, title, message) {
             toastNotification.style.display = "none";
         }, 500);
     }, 2000);
-}
+};
 
 async function addUserTask() {
-    await fetch("/Home/AddUserTask", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ TaskTitle: taskTitle.value, TaskDescription: taskInput.value }),
-    })
-        .then((response) => response.json())
-        .then((success) => {
-            if (success) {
-                showToast(true, 'Успех', 'Операция выполнена успешно');
-            } else {
-                showToast(false, 'Ошибка','Произошла ошибка');
-            }
-        })
-        .catch((error) => {
-            console.error("Ошибка:", error);
+    const title = taskTitle.value.trim();
+    const description = taskInput.value.trim();
+
+    if (!title || !description) {
+        showToast(false, 'Ошибка', 'Все поля должны быть заполнены');
+        return;
+    }
+
+    try {
+        console.log('Отправка задачи:', { title, description });
+        closeModal();
+
+        const response = await fetch("/Home/AddUserTask", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                TaskTitle: title,
+                TaskDescription: description
+            }),
         });
-}
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || 'Ошибка сервера');
+        }
+
+        const result = await response.json();
+
+        if (result.success) {
+            showToast(true, 'Успех', 'Задача успешно добавлена');
+        } else {
+            showToast(false, 'Ошибка', result.message || 'Не удалось добавить задачу');
+        }
+    } catch (error) {
+        console.error("Ошибка:", error);
+        showToast(false, 'Ошибка', error.message || 'Произошла непредвиденная ошибка');
+    }
+};
 
 buttons.forEach((button) => {
     button.addEventListener("click", function () {
@@ -79,7 +99,6 @@ buttons.forEach((button) => {
     });
 });
 
-closeBtn.addEventListener("click", closeModal);
 cancelBtn.addEventListener("click", closeModal);
 
 submitBtn.addEventListener("click", function () {

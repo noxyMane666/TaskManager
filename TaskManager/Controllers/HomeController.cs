@@ -25,6 +25,7 @@ namespace TaskManager.Controllers
         {
             try
             {
+                Console.WriteLine(requestTask);
                 if (ModelState.IsValid)
                 {
                     if (await _context.Tasks.AnyAsync(t => t.Id == requestTask.Id))
@@ -37,6 +38,7 @@ namespace TaskManager.Controllers
                     }
 
                     var taskModel = TaskItemMapper.ToModel(requestTask);
+
                     _context.Tasks.Add(taskModel);
                     await _context.SaveChangesAsync();
 

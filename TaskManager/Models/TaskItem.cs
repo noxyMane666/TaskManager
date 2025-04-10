@@ -8,7 +8,7 @@ namespace TaskManager.Models
         public required string TaskTitle { get; set; }
         public required string TaskDescription { get; set; }
         public bool IsClosed { get; set; } = false;
-        public DateTime CreatedDate { get; set; }  = DateTime.Now;
+        public DateTime CreatedDate { get; set; }  = DateTime.UtcNow;
         
         public void ChangeTaskState(bool stateBool)
         {
