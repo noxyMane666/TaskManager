@@ -89,3 +89,4 @@ TestResults/
 
 ##setting
 appsettings.json
+appsettings.Development.json

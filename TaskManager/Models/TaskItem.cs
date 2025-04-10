@@ -12,14 +12,7 @@ namespace TaskManager.Models
         
         public void ChangeTaskState(bool stateBool)
         {
-            if (stateBool)
-            {
-                IsClosed = true;
-            }
-            else
-            {
-                IsClosed = false;
-            }
+            IsClosed = stateBool;
         }
     }
 }

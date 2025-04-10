@@ -2,6 +2,26 @@
     return boolState ? "Завершена" : "Активна";
 }
 
+function openTaskModal(taskElement) {
+    const modal = document.getElementById('taskModal');
+    const modalContent = document.querySelector('.modal-content');
+    const taskContent = taskElement.cloneNode(true);
+
+    modalContent.innerHTML = '';
+    modalContent.appendChild(taskContent);
+
+    modal.style.display = 'flex';
+    modal.querySelector('.modal-close').onclick = () => {
+        modal.style.display = 'none';
+    };
+
+    modal.onclick = function (e) {
+        if (e.target === this) {
+            modal.style.display = 'none';
+        }
+    };
+};
+
 async function updateTaskStatus(taskId, boolState) {
     await fetch('UpdateTaskState', {
         method: 'POST',
@@ -51,5 +71,14 @@ const toggleButtons = document.querySelectorAll('.status-toggle').forEach(toggle
         const isClosed = this.checked;
 
         updateTaskStatus(taskId, isClosed);
+    });
+});
+
+const taskCards = document.querySelectorAll('.task').forEach(card => {
+    card.addEventListener('click', function (e) {
+        if (!e.target.closest('.switch, .status-toggle')) {
+            openTaskModal(card);
+        }
+
     });
 });
