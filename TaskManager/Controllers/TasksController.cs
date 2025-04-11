@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
-using System.Reflection;
 using TaskManager.Data;
 using TaskManager.DTO;
 using TaskManager.Mappers;
@@ -14,28 +12,92 @@ namespace TaskManager.Controllers
     {
         private readonly ILogger<TasksController> _logger = logger;
         private readonly AppDbContext _baseContext = baseContext;
-
+        
         [HttpGet]
-        async public Task<IActionResult> MyTasks(bool isClosed)
+        public async Task<IActionResult> MyTasks(bool isClosed)
         {
-            var tasks = await _baseContext.Tasks
-                            .Where(t => t.IsClosed == isClosed)
-                            .Select(t => new TaskItemDto
-                            {
-                                Id = t.Id,
-                                TaskTitle = t.TaskTitle,
-                                TaskDescription = t.TaskDescription,
-                                IsClosed = t.IsClosed
-                            })
-                            .ToListAsync();
-    
-            return View(tasks);
+            try
+            {
+                var tasks = await _baseContext.Tasks
+                    .Where(t => t.IsClosed == isClosed)
+                    .Select(t => new TaskItemDto
+                    {
+                        Id = t.Id,
+                        TaskTitle = t.TaskTitle,
+                        TaskDescription = t.TaskDescription,
+                        IsClosed = t.IsClosed
+                    })
+                    .ToListAsync();
+
+                return View(tasks);
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex.Message, ex);
+                return StatusCode(500, $"Данная страница сейчас недосупна. Не удалось получить задачи");
+            }
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> AddTask([FromBody] TaskItemDto requestTask)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    if (await _baseContext.Tasks.AnyAsync(t => t.Id == requestTask.Id))
+                    {
+                        return Json((success: false, 
+                            error: " Ошибка", 
+                            detailedError: $"Задача с ID {requestTask.Id} уже есть"));
+                    }
+
+                    var taskModel = TaskItemMapper.ToModel(requestTask);
+
+                    _baseContext.Tasks.Add(taskModel);
+                    await _baseContext.SaveChangesAsync();
+
+                    return Json(new
+                    {
+                        success = true,
+                        task = requestTask
+                    });
+                }
+                else
+                {
+                    var errors = ModelState
+                        .Where(e => e.Value?.Errors.Count > 0)
+                        .ToDictionary(
+                            kvp => kvp.Key,
+                            kvp => kvp.Value?.Errors.Select(e => e.ErrorMessage).ToArray()
+                        );
+
+                    _logger.LogWarning("Не удалось валидировать параметры: {@Errors}", errors);
+
+                    return Json(new
+                    {
+                        success = false,
+                        error = "Валидация завершилась неуспешно",
+                        detailedError = errors
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Ошибка при добавлении задачи");
+                
+                return Json(new
+                {
+                    success = false,
+                    error = "Ошибка при добавлении задачи",
+                    detailedError = ex.Message
+                });
+            }
         }
 
         [HttpPost]
         public async Task<IActionResult> UpdateTaskState([FromBody] UpdateTaskStateDto dto)
         {
-
             try
             {
                 if (!ModelState.IsValid)
@@ -75,8 +137,7 @@ namespace TaskManager.Controllers
                 _logger.LogError(ex, "Ошибка обновления статуса задачи {dto.Id}", (dto.Id));
                 return StatusCode(500, $"При обновлении статуса задачи произошла ошибка: {ex.Message}");
             }
-            
-;        }
+        }
 
         [HttpPost]
         public async Task<IActionResult> UpdateTask([FromBody] UpdateTaskItemDto dto)

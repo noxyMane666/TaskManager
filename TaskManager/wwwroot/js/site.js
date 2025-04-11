@@ -12,7 +12,7 @@ function openModal() {
         modal.classList.add("active");
     }, 10);
     taskInput.focus();
-};
+}
 
 function closeModal() {
     modal.classList.remove("active");
@@ -21,7 +21,7 @@ function closeModal() {
     }, 300);
     taskInput.value = "";
     taskTitle.value = "";
-};
+}
 
 function showToast(title, message) {
     toastTitle.textContent = title;
@@ -37,7 +37,7 @@ function showToast(title, message) {
             toastNotification.style.display = "none";
         }, 500);
     }, 2000);
-};
+}
 
 async function addUserTask() {
     const title = taskTitle.value.trim();
@@ -46,7 +46,7 @@ async function addUserTask() {
     closeModal();
 
     try {
-        const response = await fetch("/Home/AddUserTask", {
+        const response = await fetch("/Tasks/AddTask/", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -73,7 +73,7 @@ async function addUserTask() {
         console.error("Ошибка:", error);
         showToast('Ошибка', error.message || 'Произошла непредвиденная ошибка');
     }
-};
+}
 
 buttons.forEach((button) => {
     button.addEventListener("click", function () {
