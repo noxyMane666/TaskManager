@@ -161,6 +161,7 @@ namespace TaskManager.Controllers
 
                 if (taskModel is null)
                 {
+                    Console.WriteLine("sdsdssdssdss");
                     return StatusCode(404, $"Задача с id {dto.Id} не найдена");
                 }
 
@@ -184,7 +185,7 @@ namespace TaskManager.Controllers
             try
             {
                 var taskModel = await GetTaskById(id);
-
+               
                 if (taskModel is null)
                 {
                     return StatusCode(404, $"Задача с id {id} не найдена");

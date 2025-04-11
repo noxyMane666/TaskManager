@@ -135,7 +135,7 @@ document.querySelectorAll('.task').forEach(task => {
 
 cardCancelBtn.addEventListener("click", closeGridModal);
 cardSubmitBtn.addEventListener("click", async function () {
-    if (taskTitle.value.trim().length > 50) {
+    if (taskCardTitle.value.trim().length > 50) {
         showToast(
             "Неверно заполнена форма",
             "Количество символов в описании должно быть не больше 50"
