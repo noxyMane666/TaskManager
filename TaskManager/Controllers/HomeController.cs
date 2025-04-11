@@ -14,6 +14,11 @@ namespace TaskManager.Controllers
     {
         private readonly ILogger<HomeController> _logger = logger;
         private readonly AppDbContext _context = context;
+
+        public IActionResult Index()
+        {
+            return View();
+        }
         
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

@@ -100,9 +100,9 @@ async function claimTaskUpdates() {
         const result = await response.json();
 
         if (result.success) {
-            showToast('Успех', 'Задача успешно добавлена');
+            showToast('Успех', 'Задача успешно обновлена');
         } else {
-            showToast('Ошибка', result.message || 'Не удалось добавить задачу');
+            showToast('Ошибка', result.message || 'Не удалось обновить задачу');
         }
     } catch (error) {
         console.error("Ошибка:", error);

@@ -12,7 +12,7 @@ namespace TaskManager.Controllers
     {
         private readonly ILogger<TasksController> _logger = logger;
         private readonly AppDbContext _baseContext = baseContext;
-        
+
         [HttpGet]
         public async Task<IActionResult> MyTasks(bool isClosed)
         {
@@ -33,13 +33,13 @@ namespace TaskManager.Controllers
             }
             catch (Exception ex)
             {
-                logger.LogError(ex.Message, ex);
-                return StatusCode(500, $"Данная страница сейчас недосупна. Не удалось получить задачи");
+                _logger.LogError(ex.Message, ex);
+                return StatusCode(500, "Данная страница сейчас недосупна. Не удалось получить задачи");
             }
         }
 
         [HttpPost]
-        public async Task<JsonResult> AddTask([FromBody] TaskItemDto requestTask)
+        public async Task<IActionResult> AddTask([FromBody] TaskItemDto requestTask)
         {
             try
             {
@@ -47,7 +47,8 @@ namespace TaskManager.Controllers
                 {
                     if (await _baseContext.Tasks.AnyAsync(t => t.Id == requestTask.Id))
                     {
-                        return Json((success: false, 
+                        return Json((
+                            success: false, 
                             error: " Ошибка", 
                             detailedError: $"Задача с ID {requestTask.Id} уже есть"));
                     }
@@ -57,10 +58,9 @@ namespace TaskManager.Controllers
                     _baseContext.Tasks.Add(taskModel);
                     await _baseContext.SaveChangesAsync();
 
-                    return Json(new
-                    {
-                        success = true,
-                        task = requestTask
+                    return Ok(new { 
+                        success = true, 
+                        updatedTask = requestTask
                     });
                 }
                 else
@@ -73,25 +73,19 @@ namespace TaskManager.Controllers
                         );
 
                     _logger.LogWarning("Не удалось валидировать параметры: {@Errors}", errors);
-
-                    return Json(new
+                    return BadRequest(new
                     {
                         success = false,
-                        error = "Валидация завершилась неуспешно",
-                        detailedError = errors
+                        errors = ModelState.Values
+                            .SelectMany(v => v.Errors)
+                            .Select(e => e.ErrorMessage)
                     });
                 }
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Ошибка при добавлении задачи");
-                
-                return Json(new
-                {
-                    success = false,
-                    error = "Ошибка при добавлении задачи",
-                    detailedError = ex.Message
-                });
+                _logger.LogError(ex, $"При создании задачи произошла ошибка: {ex.Message})");
+                return StatusCode(500, $"При создании задачи произошла ошибка: {ex.Message}");
             }
         }
 
@@ -130,7 +124,10 @@ namespace TaskManager.Controllers
                 task.ChangeTaskState(dto.IsClosed);
                 await _baseContext.SaveChangesAsync();
 
-                return Ok(new { success = true, updatedTask = dto });
+                return Ok(new { 
+                    success = true, 
+                    updatedTask = dto 
+                });
             }
             catch(Exception ex)
             {
@@ -174,7 +171,10 @@ namespace TaskManager.Controllers
                 TaskItemMapper.MapUpdates(task, dto);
 
                 await _baseContext.SaveChangesAsync();
-                return Ok(new { success = true, updatedTask = dto });
+                return Ok(new { 
+                    success = true, 
+                    updatedTask = dto 
+                });
             }
             catch(Exception ex)
             {
