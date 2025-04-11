@@ -1,11 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
-using System.Threading.Tasks;
 using TaskManager.Data;
-using TaskManager.DTO;
-using TaskManager.Mappers;
 using TaskManager.Models;
 
 namespace TaskManager.Controllers

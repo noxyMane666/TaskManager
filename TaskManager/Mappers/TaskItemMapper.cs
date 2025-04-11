@@ -30,28 +30,20 @@ namespace TaskManager.Mappers
 
         public static void MapUpdates(TaskItem model, UpdateTaskItemDto dto)
         {
-            try
-            {
-                var dtoProps = typeof(UpdateTaskItemDto).GetProperties();
+            var dtoProps = typeof(UpdateTaskItemDto).GetProperties();
 
-                foreach (var prop in dtoProps)
+            foreach (var prop in dtoProps)
+            {
+                var dtoValue = prop.GetValue(dto);
+
+                if (dtoValue is null) continue;
+                
+                var modelProperty = typeof(TaskItem).GetProperty(prop.Name);
+
+                if (modelProperty != null && modelProperty.CanWrite)
                 {
-                    var dtoValue = prop.GetValue(dto);
-
-                    if (dtoValue is not null)
-                    {
-                        var modelProperty = typeof(TaskItem).GetProperty(prop.Name);
-
-                        if (modelProperty != null && modelProperty.CanWrite)
-                        {
-                            modelProperty.SetValue(model, dto);
-                        }
-                    }
+                    modelProperty.SetValue(model, dto);
                 }
-            }
-            catch (Exception)
-            {
-                throw;
             }
         }
     }

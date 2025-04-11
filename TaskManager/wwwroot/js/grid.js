@@ -30,92 +30,98 @@ function closeGridModal() {
     }, 300);
 }
 
+async function apiRequest(url, method = 'GET', body = null) {
+    try {
+        const options = {
+            method,
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        };
+
+        if (body) {
+            options.body = JSON.stringify(body);
+        }
+
+        const response = await fetch(url, options);
+        const data = await response.json();
+
+        if (!response.ok || !data.success) {
+            throw new Error(data.message || 'Ошибка запроса');
+        }
+
+        return data;
+    } catch (error) {
+        console.error(`[API ERROR] ${url}:`, error.message);
+        throw error;
+    }
+}
+
 async function updateTaskStatus(taskId, boolState) {
-    await fetch('UpdateTaskState', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
+    try {
+        await apiRequest('UpdateTaskState', 'POST', {
             Id: taskId,
             IsClosed: boolState
-        })
-    }).then(response => {
-        if (!response.ok) {
-            throw new error('Ошибка обновления статуса');
-        }
-        return response.json();
-    }).then(data => {
-        if (data.success) {
-            const taskCard = document.getElementById(`task-${taskId}`);
-            const toggle = document.querySelector(`.status-toggle[data-task-id="${taskId}"]`);
-            const toggleText = toggle.closest('.task-status').querySelector('span:not(.slider)');
+        });
 
-            toggleText.textContent = getToggleText(boolState);
+        const taskCard = document.getElementById(`task-${taskId}`);
+        const toggle = document.querySelector(`.status-toggle[data-task-id="${taskId}"]`);
+        const toggleText = toggle.closest('.task-status').querySelector('span:not(.slider)');
 
-            taskCard.style.transition = 'opacity 0.3s ease-out, transform 0.3s ease-out';
-            taskCard.style.opacity = '0';
-            taskCard.style.transform = 'translateX(-20px)';
+        toggleText.textContent = getToggleText(boolState);
 
-            setTimeout(() => {
-                taskCard.remove();
-            }, 300); 
+        taskCard.style.transition = 'opacity 0.3s ease-out, transform 0.3s ease-out';
+        taskCard.style.opacity = '0';
+        taskCard.style.transform = 'translateX(-20px)';
 
-        }
-        else {
-            throw new Error(`Задача с id ${taskId} не найдена`);
-        }
-    }).catch(error => {
+        setTimeout(() => {
+            taskCard.remove();
+        }, 300);
+    } catch (error) {
         console.error(error);
 
         const toggle = document.querySelector(`.status-toggle[data-task-id="${taskId}"]`);
         toggle.checked = !boolState;
-    });
-};
 
-async function claimTaskUpdates() {
+        showToast('Ошибка', error.message || 'Ошибка обновления статуса');
+    }
+}
+
+async function claimTaskUpdates(taskId) {
     const title = taskCardTitle.value.trim();
     const description = taskCardInput.value.trim();
 
     closeGridModal();
 
-    try
-    {
-        const response = await fetch("UpdateTask", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                TaskTitle: title,
-                TaskDescription: description
-            }),
+    try {
+        await apiRequest('UpdateTask', 'POST', {
+            Id: taskId,
+            TaskTitle: title,
+            TaskDescription: description
         });
 
-        if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.message || 'Ошибка сервера');
-        }
-
-        const result = await response.json();
-
-        if (result.success) {
-            showToast('Успех', 'Задача успешно обновлена');
-        } else {
-            showToast('Ошибка', result.message || 'Не удалось обновить задачу');
-        }
+        showToast('Успех', 'Задача успешно обновлена');
     } catch (error) {
-        console.error("Ошибка:", error);
         showToast('Ошибка', error.message || 'Произошла непредвиденная ошибка');
     }
-};
+}
+
+async function deleteTask(taskId) {
+    try {
+        await apiRequest('DeleteTask', 'POST', { Id: taskId });
+        showToast('Успех', 'Задача успешно удалена');
+    } catch (error) {
+        showToast('Ошибка', error.message || 'Ошибка при удалении задачи');
+    }
+}
+
 
 document.querySelectorAll('.status-toggle').forEach(toggle => {
-    toggle.addEventListener('change', function () {
+    toggle.addEventListener('change', async function () {
         const taskId = this.getAttribute('data-task-id');
         const isClosed = this.checked;
 
-        updateTaskStatus(taskId, isClosed);
+        await updateTaskStatus(taskId, isClosed);
     });
 });
 
@@ -128,7 +134,7 @@ document.querySelectorAll('.task').forEach(task => {
 });
 
 cardCancelBtn.addEventListener("click", closeGridModal);
-cardSubmitBtn.addEventListener("click", function () {
+cardSubmitBtn.addEventListener("click", async function () {
     if (taskTitle.value.trim().length > 50) {
         showToast(
             "Неверно заполнена форма",
@@ -138,7 +144,7 @@ cardSubmitBtn.addEventListener("click", function () {
         taskCardInput.value.trim().length > 10 ||
         taskCardTitle.value.trim().length > 10
     ) {
-        addUserTask();
+        await claimTaskUpdates();
     } else {
         showToast(
             "Неверно заполнена форма",

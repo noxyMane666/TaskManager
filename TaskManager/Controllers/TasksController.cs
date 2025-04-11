@@ -18,7 +18,7 @@ namespace TaskManager.Controllers
         {
             try
             {
-                var tasks = await _baseContext.Tasks
+                var userTasks = await _baseContext.Tasks
                     .Where(t => t.IsClosed == isClosed)
                     .Select(t => new TaskItemDto
                     {
@@ -29,12 +29,12 @@ namespace TaskManager.Controllers
                     })
                     .ToListAsync();
 
-                return View(tasks);
+                return View(userTasks);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message, ex);
-                return StatusCode(500, "Данная страница сейчас недосупна. Не удалось получить задачи");
+                return StatusCode(500, "Данная страница сейчас недосупна. ");
             }
         }
 
@@ -49,12 +49,10 @@ namespace TaskManager.Controllers
                     {
                         return Json((
                             success: false, 
-                            error: " Ошибка", 
-                            detailedError: $"Задача с ID {requestTask.Id} уже есть"));
+                            error: $"Задача с ID {requestTask.Id} уже есть"));
                     }
 
                     var taskModel = TaskItemMapper.ToModel(requestTask);
-
                     _baseContext.Tasks.Add(taskModel);
                     await _baseContext.SaveChangesAsync();
 
@@ -104,7 +102,6 @@ namespace TaskManager.Controllers
                                     );
 
                     _logger.LogError("Ошибка валидации при добавлении задачи: {@Errors}", errors);
-
                     return BadRequest(new
                     {
                         success = false,
@@ -114,14 +111,14 @@ namespace TaskManager.Controllers
                     });
                 }
 
-                var task = await _baseContext.Tasks.FirstOrDefaultAsync(t => t.Id == dto.Id);
+                var taskModel = await GetTaskById(dto.Id);
 
-                if (task is null)
+                if (taskModel is null)
                 {
                     return StatusCode(404, $"Задача с id {dto.Id} не найдена");
                 }
 
-                task.ChangeTaskState(dto.IsClosed);
+                taskModel.ChangeTaskState(dto.IsClosed);
                 await _baseContext.SaveChangesAsync();
 
                 return Ok(new { 
@@ -151,7 +148,6 @@ namespace TaskManager.Controllers
                         );
 
                     _logger.LogError("Ошибка валидации при добавлении задачи: {@Errors}", errors);
-
                     return BadRequest(new
                     {
                         success = false,
@@ -161,16 +157,16 @@ namespace TaskManager.Controllers
                     });
                 }
 
-                var task = await _baseContext.Tasks.FindAsync(dto.Id);
+                var taskModel = await GetTaskById(dto.Id);
 
-                if (task is null)
+                if (taskModel is null)
                 {
                     return StatusCode(404, $"Задача с id {dto.Id} не найдена");
                 }
 
-                TaskItemMapper.MapUpdates(task, dto);
-
+                TaskItemMapper.MapUpdates(taskModel, dto);
                 await _baseContext.SaveChangesAsync();
+                
                 return Ok(new { 
                     success = true, 
                     updatedTask = dto 
@@ -183,6 +179,32 @@ namespace TaskManager.Controllers
             }
         }
 
+        public async Task<IActionResult> DeleteTask(int id)
+        {
+            try
+            {
+                var taskModel = await GetTaskById(id);
+
+                if (taskModel is null)
+                {
+                    return StatusCode(404, $"Задача с id {id} не найдена");
+                }
+                
+                _baseContext.Tasks.Remove(taskModel);
+                await _baseContext.SaveChangesAsync();
+                
+                return Ok(new
+                {
+                    success = true
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Ошибка удаления задачи {id}", (id));
+                return StatusCode(500, $"При удалении задачи произошла ошибкаЖ: {ex.Message}");
+            }
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
@@ -190,6 +212,11 @@ namespace TaskManager.Controllers
             {
                 RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier
             });
+        }
+
+        private async Task<TaskItem?> GetTaskById(int id)
+        {
+            return await _baseContext.Tasks.FindAsync(id);
         }
     }
 }
