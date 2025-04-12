@@ -1,5 +1,8 @@
 using Microsoft.EntityFrameworkCore;
+using TaskManager.Abstractions;
 using TaskManager.Data;
+using TaskManager.Mappers;
+using TaskManager.Models;
 
 namespace TaskManager
 {
@@ -13,6 +16,7 @@ namespace TaskManager
             builder.Services.AddDbContext<AppDbContext>(options =>
                 options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"))
             );
+            builder.Services.AddScoped<ITaskMapper, TaskItemMapper>();
 
             var app = builder.Build();
 

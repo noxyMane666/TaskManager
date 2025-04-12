@@ -1,12 +1,13 @@
 ﻿using System.Threading.Tasks;
+using TaskManager.Abstractions;
 using TaskManager.DTO;
 using TaskManager.Models;
 
 namespace TaskManager.Mappers
 {
-    public static class TaskItemMapper
+    public class TaskItemMapper : ITaskMapper
     {
-        public static TaskItem ToModel (TaskItemDto dto)
+        public TaskItem ToModel (TaskItemDto dto)
         {
             return new TaskItem
             {
@@ -17,7 +18,7 @@ namespace TaskManager.Mappers
             };
         }
 
-        public static TaskItemDto ToGetDto(TaskItem model)
+        public TaskItemDto ToGetDto(TaskItem model)
         {
             return new TaskItemDto
             {
@@ -28,7 +29,7 @@ namespace TaskManager.Mappers
             };
         }
 
-        public static void MapUpdates(TaskItem model, UpdateTaskItemDto dto)
+        public void MapUpdates(TaskItem model, UpdateTaskItemDto dto)
         {
             var dtoProps = typeof(UpdateTaskItemDto).GetProperties();
 

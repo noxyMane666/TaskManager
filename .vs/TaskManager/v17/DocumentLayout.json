@@ -7,12 +7,16 @@
       "RelativeMoniker": "D:0:0:{EEC5D2EA-508F-4745-BE05-B29B7779B4C8}|TaskManager\\TaskManager.csproj|solutionrelative:taskmanager\\wwwroot\\js\\grid.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{EEC5D2EA-508F-4745-BE05-B29B7779B4C8}|TaskManager\\TaskManager.csproj|c:\\users\\nagimovra\\source\\repos\\taskmanager\\taskmanager\\controllers\\taskscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{EEC5D2EA-508F-4745-BE05-B29B7779B4C8}|TaskManager\\TaskManager.csproj|solutionrelative:taskmanager\\controllers\\taskscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{EEC5D2EA-508F-4745-BE05-B29B7779B4C8}|TaskManager\\TaskManager.csproj|c:\\users\\nagimovra\\source\\repos\\taskmanager\\taskmanager\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EEC5D2EA-508F-4745-BE05-B29B7779B4C8}|TaskManager\\TaskManager.csproj|solutionrelative:taskmanager\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{EEC5D2EA-508F-4745-BE05-B29B7779B4C8}|TaskManager\\TaskManager.csproj|c:\\users\\nagimovra\\source\\repos\\taskmanager\\taskmanager\\dto\\updatetaskitemdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{EEC5D2EA-508F-4745-BE05-B29B7779B4C8}|TaskManager\\TaskManager.csproj|solutionrelative:taskmanager\\dto\\updatetaskitemdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EEC5D2EA-508F-4745-BE05-B29B7779B4C8}|TaskManager\\TaskManager.csproj|c:\\users\\nagimovra\\source\\repos\\taskmanager\\taskmanager\\controllers\\taskscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EEC5D2EA-508F-4745-BE05-B29B7779B4C8}|TaskManager\\TaskManager.csproj|solutionrelative:taskmanager\\controllers\\taskscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{EEC5D2EA-508F-4745-BE05-B29B7779B4C8}|TaskManager\\TaskManager.csproj|c:\\users\\nagimovra\\source\\repos\\taskmanager\\taskmanager\\wwwroot\\js\\site.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
@@ -30,46 +34,8 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 4,
           "Children": [
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "grid.js",
-              "DocumentMoniker": "C:\\Users\\NagimovRA\\source\\repos\\TaskManager\\TaskManager\\wwwroot\\js\\grid.js",
-              "RelativeDocumentMoniker": "TaskManager\\wwwroot\\js\\grid.js",
-              "ToolTip": "C:\\Users\\NagimovRA\\source\\repos\\TaskManager\\TaskManager\\wwwroot\\js\\grid.js",
-              "RelativeToolTip": "TaskManager\\wwwroot\\js\\grid.js",
-              "ViewState": "AQIAADIAAAAAAAAAAAAwwJIAAAAfAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
-              "WhenOpened": "2025-04-11T13:43:37.98Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "site.js",
-              "DocumentMoniker": "C:\\Users\\NagimovRA\\source\\repos\\TaskManager\\TaskManager\\wwwroot\\js\\site.js",
-              "RelativeDocumentMoniker": "TaskManager\\wwwroot\\js\\site.js",
-              "ToolTip": "C:\\Users\\NagimovRA\\source\\repos\\TaskManager\\TaskManager\\wwwroot\\js\\site.js",
-              "RelativeToolTip": "TaskManager\\wwwroot\\js\\site.js",
-              "ViewState": "AQIAAFYAAAAAAAAAAAAIwAAAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
-              "WhenOpened": "2025-04-11T18:07:31.149Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "MyTasks.cshtml",
-              "DocumentMoniker": "C:\\Users\\NagimovRA\\source\\repos\\TaskManager\\TaskManager\\Views\\Tasks\\MyTasks.cshtml",
-              "RelativeDocumentMoniker": "TaskManager\\Views\\Tasks\\MyTasks.cshtml",
-              "ToolTip": "C:\\Users\\NagimovRA\\source\\repos\\TaskManager\\TaskManager\\Views\\Tasks\\MyTasks.cshtml",
-              "RelativeToolTip": "TaskManager\\Views\\Tasks\\MyTasks.cshtml",
-              "ViewState": "AQIAAAMAAAAAAAAAAAAAABkAAAAeAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-04-11T13:44:51.672Z"
-            },
             {
               "$type": "Document",
               "DocumentIndex": 2,
@@ -78,22 +44,74 @@
               "RelativeDocumentMoniker": "TaskManager\\DTO\\UpdateTaskItemDto.cs",
               "ToolTip": "C:\\Users\\NagimovRA\\source\\repos\\TaskManager\\TaskManager\\DTO\\UpdateTaskItemDto.cs",
               "RelativeToolTip": "TaskManager\\DTO\\UpdateTaskItemDto.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAYAAAAmAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-11T13:43:16.319Z",
+              "WhenOpened": "2025-04-12T18:03:04.88Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 3,
               "Title": "TasksController.cs",
               "DocumentMoniker": "C:\\Users\\NagimovRA\\source\\repos\\TaskManager\\TaskManager\\Controllers\\TasksController.cs",
               "RelativeDocumentMoniker": "TaskManager\\Controllers\\TasksController.cs",
               "ToolTip": "C:\\Users\\NagimovRA\\source\\repos\\TaskManager\\TaskManager\\Controllers\\TasksController.cs",
               "RelativeToolTip": "TaskManager\\Controllers\\TasksController.cs",
-              "ViewState": "AQIAAFoAAAAAAAAAAAAowG4AAAAXAAAA",
+              "ViewState": "AQIAAHEAAAAAAAAAAAAwwI4AAAAzAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-11T13:19:00.876Z",
+              "WhenOpened": "2025-04-12T18:02:37.41Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "site.js",
+              "DocumentMoniker": "C:\\Users\\NagimovRA\\source\\repos\\TaskManager\\TaskManager\\wwwroot\\js\\site.js",
+              "RelativeDocumentMoniker": "TaskManager\\wwwroot\\js\\site.js",
+              "ToolTip": "C:\\Users\\NagimovRA\\source\\repos\\TaskManager\\TaskManager\\wwwroot\\js\\site.js",
+              "RelativeToolTip": "TaskManager\\wwwroot\\js\\site.js",
+              "ViewState": "AQIAABMAAAAAAAAAAAAgwAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
+              "WhenOpened": "2025-04-12T17:40:09.72Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "MyTasks.cshtml",
+              "DocumentMoniker": "C:\\Users\\NagimovRA\\source\\repos\\TaskManager\\TaskManager\\Views\\Tasks\\MyTasks.cshtml",
+              "RelativeDocumentMoniker": "TaskManager\\Views\\Tasks\\MyTasks.cshtml",
+              "ToolTip": "C:\\Users\\NagimovRA\\source\\repos\\TaskManager\\TaskManager\\Views\\Tasks\\MyTasks.cshtml",
+              "RelativeToolTip": "TaskManager\\Views\\Tasks\\MyTasks.cshtml",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAB4AAAA6AAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-04-12T16:47:57.901Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "grid.js",
+              "DocumentMoniker": "C:\\Users\\NagimovRA\\source\\repos\\TaskManager\\TaskManager\\wwwroot\\js\\grid.js",
+              "RelativeDocumentMoniker": "TaskManager\\wwwroot\\js\\grid.js",
+              "ToolTip": "C:\\Users\\NagimovRA\\source\\repos\\TaskManager\\TaskManager\\wwwroot\\js\\grid.js",
+              "RelativeToolTip": "TaskManager\\wwwroot\\js\\grid.js",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAGMAAAAbAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
+              "WhenOpened": "2025-04-12T16:37:57.921Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\NagimovRA\\source\\repos\\TaskManager\\TaskManager\\Program.cs",
+              "RelativeDocumentMoniker": "TaskManager\\Program.cs",
+              "ToolTip": "C:\\Users\\NagimovRA\\source\\repos\\TaskManager\\TaskManager\\Program.cs",
+              "RelativeToolTip": "TaskManager\\Program.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABIAAABGAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-12T04:38:32.228Z",
               "EditorCaption": ""
             }
           ]

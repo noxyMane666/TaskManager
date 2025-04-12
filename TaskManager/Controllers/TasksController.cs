@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
+using TaskManager.Abstractions;
 using TaskManager.Data;
 using TaskManager.DTO;
 using TaskManager.Mappers;
@@ -8,9 +9,14 @@ using TaskManager.Models;
 
 namespace TaskManager.Controllers
 {
-    public class TasksController(ILogger<TasksController> logger, AppDbContext baseContext) : Controller
+    public class TasksController(
+        ILogger<TasksController> logger,
+        ITaskMapper taskMapper,
+        AppDbContext baseContext
+        ) : Controller
     {
         private readonly ILogger<TasksController> _logger = logger;
+        private readonly ITaskMapper _taskMapper = taskMapper;
         private readonly AppDbContext _baseContext = baseContext;
 
         [HttpGet]
@@ -52,7 +58,7 @@ namespace TaskManager.Controllers
                             error: $"Задача с ID {requestTask.Id} уже есть"));
                     }
 
-                    var taskModel = TaskItemMapper.ToModel(requestTask);
+                    var taskModel = _taskMapper.ToModel(requestTask);
                     _baseContext.Tasks.Add(taskModel);
                     await _baseContext.SaveChangesAsync();
 
@@ -165,7 +171,7 @@ namespace TaskManager.Controllers
                     return StatusCode(404, $"Задача с id {dto.Id} не найдена");
                 }
 
-                TaskItemMapper.MapUpdates(taskModel, dto);
+                _taskMapper.MapUpdates(taskModel, dto);
                 await _baseContext.SaveChangesAsync();
                 
                 return Ok(new { 
