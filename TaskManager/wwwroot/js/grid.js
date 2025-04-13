@@ -36,7 +36,8 @@ async function updateTaskStatus(taskId, boolState) {
 
         const taskCard = document.getElementById(`task-${taskId}`);
         const toggle = document.querySelector(`.status-toggle[data-task-id="${taskId}"]`);
-        const toggleText = toggle.closest('.task-status').querySelector('span:not(.slider)');
+        const toggleText = toggle.closest('.task-status')
+            .querySelector('span:not(.slider)');
 
         toggleText.textContent = getToggleText(boolState);
 
@@ -109,10 +110,11 @@ function openGridModal(taskElement) {
     }
 
     async function handleSubmit() {
+        closeGridModal();
         try {
             if (taskCardTitle.value.trim() !== title.trim() ||
                 taskCardInput.value.trim() !== description.replace(/^"|"$/g, '').trim()) {
-                updatedTask = await submitTaskUpdates({
+                const updatedTask = await submitTaskUpdates({
                     id: taskId,
                     title: taskCardTitle.value,
                     description: taskCardInput.value
@@ -126,8 +128,6 @@ function openGridModal(taskElement) {
         } catch (error) {
             console.error(error);
             showToast('Ошибка', `Ошибка при обновлении задачи ${taskId}`);
-        } finally {
-            closeGridModal();
         }
     }
 
@@ -141,8 +141,6 @@ function openGridModal(taskElement) {
         } catch (error) {
             console.error(error)
             showToast('Ошибка', `Ошибка при удалении задачи ${taskId}`);
-        } finally {
-            closeGridModal();
         }
     }
 

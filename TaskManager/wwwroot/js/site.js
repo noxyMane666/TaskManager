@@ -88,7 +88,8 @@ function openHomeModal() {
     }
 
     async function handleCreatedTask() {
-        submitBtn.disabled = true;
+        //submitBtn.disabled = true;
+        closeModal();
         try {
             const title = taskTitle.value.trim();
             const description = taskInput.value.trim();
@@ -115,8 +116,7 @@ function openHomeModal() {
         } catch (error) {
             console.error("Ошибка:", error);
         } finally {
-            submitBtn.disabled = false;
-            closeModal();
+            //submitBtn.disabled = false
         }
     }
 
