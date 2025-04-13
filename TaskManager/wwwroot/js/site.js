@@ -1,26 +1,39 @@
-﻿const buttons = document.querySelectorAll(".action-btn");
-const modal = document.getElementById("taskModal");
-
-const cancelBtn = document.getElementById("cancelBtn");
-const submitBtn = document.getElementById("submitBtn");
-const taskInput = document.getElementById("taskInput");
-const taskTitle = document.getElementById("taskTitle");
-
-function openModal() {
-    modal.style.display = "flex";
-    setTimeout(() => {
-        modal.classList.add("active");
-    }, 10);
-    taskInput.focus();
+﻿const API_ENDPOINTS = {
+    ADD_TASK: '/Tasks/AddTask/',
+    UPDATE_TASK_STATE: 'UpdateTaskState',
+    UPDATE_TASK: 'UpdateTask',
+    DELETE_TASK: 'DeleteTask'
 }
 
-function closeModal() {
-    modal.classList.remove("active");
-    setTimeout(() => {
-        modal.style.display = "none";
-    }, 300);
-    taskInput.value = "";
-    taskTitle.value = "";
+async function apiPostRequest(url, method = 'POST', body = null) {
+    try {
+        const options = {
+            method,
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        };
+
+        if (body) {
+            options.body = JSON.stringify(body);
+        }
+
+        const response = await fetch(url, options);
+
+        if (!response.ok) {
+            throw new Error(`HTTP ошибка: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        if (!data.success) {
+            throw new Error(data.message || 'Ошибка запроса');
+        }
+
+        return data;
+    } catch (error) {
+        throw error;
+    }
 }
 
 function showToast(title, message) {
@@ -39,78 +52,105 @@ function showToast(title, message) {
     }, 2000);
 }
 
-async function addUserTask() {
-    const title = taskTitle.value.trim();
-    const description = taskInput.value.trim();
-
-    closeModal();
+async function addUserTask(task) {
+    const title = task.taskTitle;
+    const description = task.taskDescription;
 
     try {
-        const response = await fetch("/Tasks/AddTask/", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                TaskTitle: title,
-                TaskDescription: description
-            }),
+        const data = await apiPostRequest(API_ENDPOINTS.ADD_TASK, 'POST', {
+            TaskTitle: title,
+            TaskDescription: description
         });
 
-        if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.message || 'Ошибка сервера');
-        }
-
-        const result = await response.json();
-
-        if (result.success) {
-            showToast('Успех', 'Задача успешно добавлена');
-        } else {
-            showToast('Ошибка', result.message || 'Не удалось добавить задачу');
-        }
+        return data.updatedTask
     } catch (error) {
-        console.error("Ошибка:", error);
-        showToast('Ошибка', error.message || 'Произошла непредвиденная ошибка');
+        throw error
     }
 }
 
-buttons.forEach((button) => {
-    button.addEventListener("click", function () {
-        switch (this.id) {
-            case "current-task-button":
-                window.location.href = '/Tasks/MyTasks?IsClosed=false';
-                break;
-            case "new-task-button":
-                openModal();
-                break;
-            case "closed-task-button":
-                window.location.href = '/Tasks/MyTasks?IsClosed=true';
-                break;
-            default:
-                break;
-        }
-    });
-});
+function openHomeModal() {
+    const modal = document.getElementById("taskModal");
+    const cancelBtn = document.getElementById("cancelBtn");
+    const submitBtn = document.getElementById("submitBtn");
 
-cancelBtn.addEventListener("click", closeModal);
-
-submitBtn.addEventListener("click", function () {
-    if (taskTitle.value.trim().length > 50) {
-        showToast(
-            "Неверно заполнена форма",
-            "Количество символов в описании должно быть не больше 50"
-        );
-    } else if (
-        taskInput.value.trim().length > 10 ||
-        taskTitle.value.trim().length > 10
-    ) {
-        addUserTask();
-    } else {
-        showToast(
-            "Неверно заполнена форма",
-            "Количество символов должно быть не меньше 10"
-        );
+    function cleanUp() {
+        submitBtn.removeEventListener('click', handleCreatedTask);
+        cancelBtn.removeEventListener('click', closeModal);
     }
-});
+
+    function closeModal() {
+        cleanUp()
+        setTimeout(() => {
+            taskInput.value = "";
+            taskTitle.value = "";
+            modal.style.display = "none";
+        }, 300);
+    }
+
+    async function handleCreatedTask() {
+        submitBtn.disabled = true;
+        try {
+            const title = taskTitle.value.trim();
+            const description = taskInput.value.trim();
+
+            if (title.length > 50) {
+                showToast(
+                    "Ошибка",
+                    "Заголовок не должен превышать 50 символов",
+                    'error'
+                );
+                return;
+            }
+
+            if (title.length < 10 || description.length < 10) {
+                showToast( "Ошибка", "Минимальная длина - 10 символов");
+                return;
+            }
+
+            await addUserTask({
+                taskTitle: title,
+                taskDescription: description
+            });
+            showToast("Ошибка","Минимальная длина - 10 символов");
+        } catch (error) {
+            console.error("Ошибка:", error);
+        } finally {
+            submitBtn.disabled = false;
+            closeModal();
+        }
+    }
+
+
+    modal.style.display = "flex";
+    setTimeout(() => {
+        modal.classList.add("active");
+    }, 100);
+    taskInput.focus();
+
+    cancelBtn.addEventListener("click", closeModal);
+    submitBtn.addEventListener("click", handleCreatedTask);
+}
+
+function initHomeListeners() {
+    const buttons = document.querySelectorAll(".action-btn");
+    buttons.forEach((button) => {
+        button.addEventListener("click", function () {
+            switch (this.id) {
+                case "current-task-button":
+                    window.location.href = '/Tasks/MyTasks?IsClosed=false';
+                    break;
+                case "new-task-button":
+                    openHomeModal();
+                    break;
+                case "closed-task-button":
+                    window.location.href = '/Tasks/MyTasks?IsClosed=true';
+                    break;
+                default:
+                    break;
+            }
+        });
+    });
+}
+
+document.addEventListener('DOMContentLoaded', initHomeListeners);
 

@@ -66,6 +66,18 @@
             </div>
         </div>
     </div>
+    <div id="toastNotification"
+         class="toast position-fixed"
+         style="display: none">
+        <div class="toast-header">
+            <strong class="me-auto" id="toastTitle">Уведомление</strong>
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="toast"
+                    aria-label="Close"></button>
+        </div>
+        <div class="toast-body" id="toastMessage"></div>
+    </div>
     <script src="~/js/grid.js" asp-append-version="true"></script>
 </body>
 </html>

@@ -1,33 +1,35 @@
-﻿async function apiRequest(url, method = 'POST', body = null) {
-    try {
-        const options = {
-            method,
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        };
+﻿
+function getToggleText(boolState) {
+    return boolState ? "Завершена" : "Активна";
+}
 
-        if (body) {
-            options.body = JSON.stringify(body);
-        }
+function updateTaskOnPage(taskId, newTitle, newDescription) {
+    const taskElement = document.getElementById(`task-${taskId}`);
 
-        const response = await fetch(url, options);
-        const data = await response.json();
+    if (taskElement) {
+        setTimeout(() => {
+            const titleElement = taskElement.querySelector('.title');
+            const descElement = taskElement.querySelector('.text');
 
-        if (!response.ok || !data.success) {
-            throw new Error(data.message || 'Ошибка запроса');
-        }
+            titleElement.textContent = newTitle;
+            descElement.value = `"${newDescription}"`;
+        }, 300);
+    }
+}
 
-        return data;
-    } catch (error) {
-        console.error(`Api error ${url}:`, error.message);
-        throw error;
+function removeTaskFromPage(taskId) {
+    const taskElement = document.getElementById(`task-${taskId}`);
+
+    if (taskElement) {
+        setTimeout(() => {
+            taskElement.remove();
+        }, 300);
     }
 }
 
 async function updateTaskStatus(taskId, boolState) {
     try {
-        await apiRequest('UpdateTaskState', {
+        await apiPostRequest(API_ENDPOINTS.UPDATE_TASK_STATE, 'POST', {
             Id: taskId,
             IsClosed: boolState
         });
@@ -37,10 +39,6 @@ async function updateTaskStatus(taskId, boolState) {
         const toggleText = toggle.closest('.task-status').querySelector('span:not(.slider)');
 
         toggleText.textContent = getToggleText(boolState);
-
-        taskCard.style.transition = 'opacity 0.3s ease-out, transform 0.3s ease-out';
-        taskCard.style.opacity = '0';
-        taskCard.style.transform = 'translateX(-20px)';
 
         setTimeout(() => {
             taskCard.remove();
@@ -61,61 +59,45 @@ async function submitTaskUpdates(taskId) {
     const description = taskId.description;
 
     try {
-        const updateRequest = await apiRequest('UpdateTask', {
+        const data = await apiPostRequest(API_ENDPOINTS.UPDATE_TASK, 'POST', {
             Id: id,
             TaskTitle: title,
             TaskDescription: description
         });
 
-        const data = await updateRequest.json();
-
-        if (!data.success) {
-            throw new Error(data.message || 'Ошибка запроса');
-        }
-
-        showToast('Успех', 'Данные успешно сохранены');
+        updateTaskOnPage(taskId.id, taskId.title, taskId.description);
+        return data.updatedTask
     } catch (error) {
-        console.error(error);
-        showToast('Ошибка', 'Произошла непредвиденная ошибка');
+        throw error;
+    }
+}
+async function deleteTask(taskId) {
+    try {
+        await apiPostRequest(API_ENDPOINTS.DELETE_TASK, 'POST', { Id: taskId.Id });
+
+        removeTaskFromPage(taskId.Id);
+    } catch (error) {
+        throw error;
     }
 }
 
-function getToggleText(boolState) {
-    return boolState ? "Завершена" : "Активна";
-}
 
 function openGridModal(taskElement) {
     const gridModal = document.getElementById("gridTaskModal");
-    const taskCardTitle = document.getElementById("gridTaskTitle");
-    const taskCardInput = document.getElementById("gridTaskInput");
     const cardSubmitBtn = document.getElementById("cardSubmitBtn");
     const cardCancelBtn = document.getElementById("cardCancelBtn");
-    //const cardDeleteBtn = document.getElementById("cardDeleteBtn");
+    const cardDeleteBtn = document.getElementById("cardDeleteBtn");
+    const taskId = parseInt(taskElement.id.replace('task-', ''), 10);
 
-    const taskId = taskElement.dataset.taskId;
-    const title = taskElement.querySelector('.title').textContent;
-    const description = taskElement.querySelector('.text').value;
-
-    function handleSubmit() {
-        console.log(1212121)
-        if (taskCardTitle.value.trim() !== title.trim() ||
-            taskCardInput.value.trim() !== description.replace(/^"|"$/g, '').trim()) {
-            console.log(898989)
-            submitTaskUpdates({
-                id: taskId,
-                title: taskCardTitle.value,
-                description: taskCardInput.value
-            });
-        }
-
-        cleanUp();
-    }
+    let title = taskElement.querySelector('.title').textContent;
+    let description = taskElement.querySelector('.text').value;
+    let taskCardTitle = document.getElementById("gridTaskTitle");
+    let taskCardInput = document.getElementById("gridTaskInput");
 
     function cleanUp() {
         cardSubmitBtn.removeEventListener('click', handleSubmit);
         cardCancelBtn.removeEventListener('click', closeGridModal);
-        //cardDeleteBtn.removeEventListener('click', deleteTask);
-        //gridModal.removeEventListener('click', handleModalClick);
+        cardDeleteBtn.removeEventListener('click', deleteTask);
     }
 
     function closeGridModal() {
@@ -124,6 +106,44 @@ function openGridModal(taskElement) {
         setTimeout(() => {
             gridModal.style.display = "none";
         }, 300);
+    }
+
+    async function handleSubmit() {
+        try {
+            if (taskCardTitle.value.trim() !== title.trim() ||
+                taskCardInput.value.trim() !== description.replace(/^"|"$/g, '').trim()) {
+                updatedTask = await submitTaskUpdates({
+                    id: taskId,
+                    title: taskCardTitle.value,
+                    description: taskCardInput.value
+                });
+
+                title = updatedTask.title
+                description = updatedTask.description
+
+                showToast('Успех', 'Данные успешно сохранены');
+            }
+        } catch (error) {
+            console.error(error);
+            showToast('Ошибка', `Ошибка при обновлении задачи ${taskId}`);
+        } finally {
+            closeGridModal();
+        }
+    }
+
+    async function handleDelete() {
+        try {
+            await deleteTask({
+                Id: taskId
+            });
+
+            showToast('Успех', 'Задача успешно удалена');
+        } catch (error) {
+            console.error(error)
+            showToast('Ошибка', `Ошибка при удалении задачи ${taskId}`);
+        } finally {
+            closeGridModal();
+        }
     }
 
     taskCardTitle.value = title;
@@ -136,19 +156,10 @@ function openGridModal(taskElement) {
     taskCardTitle.focus();
 
     cardCancelBtn.addEventListener('click', closeGridModal);
-    //cardDeleteBtn.addEventListener('click', deleteTask);
+    cardDeleteBtn.addEventListener('click', handleDelete);
     cardSubmitBtn.addEventListener('click', handleSubmit)
 
 }
-
-//async function deleteTask(taskId) {
-//    try {
-//        await apiRequest('DeleteTask', 'POST', { Id: taskId });
-//        showToast('Успех', 'Задача успешно удалена');
-//    } catch (error) {
-//        showToast('Ошибка', error.message || 'Ошибка при удалении задачи');
-//    }
-//}
 
 function initTaskListeners() {
     document.querySelectorAll('.status-toggle').forEach(toggle => {

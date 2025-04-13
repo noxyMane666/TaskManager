@@ -32,7 +32,6 @@ namespace TaskManager.Mappers
         public void MapUpdates(TaskItem model, UpdateTaskItemDto dto)
         {
             var dtoProps = typeof(UpdateTaskItemDto).GetProperties();
-
             foreach (var prop in dtoProps)
             {
                 var dtoValue = prop.GetValue(dto);
@@ -43,7 +42,7 @@ namespace TaskManager.Mappers
 
                 if (modelProperty != null && modelProperty.CanWrite)
                 {
-                    modelProperty.SetValue(model, dto);
+                    modelProperty.SetValue(model, dtoValue);
                 }
             }
         }

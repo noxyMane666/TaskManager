@@ -167,7 +167,6 @@ namespace TaskManager.Controllers
 
                 if (taskModel is null)
                 {
-                    Console.WriteLine("sdsdssdssdss");
                     return StatusCode(404, $"Задача с id {dto.Id} не найдена");
                 }
 
@@ -186,17 +185,19 @@ namespace TaskManager.Controllers
             }
         }
 
-        public async Task<IActionResult> DeleteTask(int id)
+        [HttpPost]
+        public async Task<IActionResult> DeleteTask([FromBody] DeleteTaskItemDto dto )
         {
             try
             {
-                var taskModel = await GetTaskById(id);
+                var taskModel = await GetTaskById(dto.Id);
                
                 if (taskModel is null)
                 {
-                    return StatusCode(404, $"Задача с id {id} не найдена");
+                    return StatusCode(404, $"Задача с id {dto.Id} не найдена");
                 }
-                
+
+                Console.WriteLine(taskModel.Id);
                 _baseContext.Tasks.Remove(taskModel);
                 await _baseContext.SaveChangesAsync();
                 
@@ -207,7 +208,7 @@ namespace TaskManager.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Ошибка удаления задачи {id}", (id));
+                _logger.LogError(ex, "Ошибка удаления задачи {id}", (dto.Id));
                 return StatusCode(500, $"При удалении задачи произошла ошибкаЖ: {ex.Message}");
             }
         }
