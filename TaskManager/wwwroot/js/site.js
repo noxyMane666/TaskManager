@@ -64,7 +64,7 @@ async function addUserTask(task) {
 
         return data.updatedTask
     } catch (error) {
-        throw error
+        throw error;
     }
 }
 
@@ -72,7 +72,7 @@ function openHomeModal() {
     const modal = document.getElementById("taskModal");
     const cancelBtn = document.getElementById("cancelBtn");
     const submitBtn = document.getElementById("submitBtn");
-
+ 
     function cleanUp() {
         submitBtn.removeEventListener('click', handleCreatedTask);
         cancelBtn.removeEventListener('click', closeModal);
@@ -88,38 +88,36 @@ function openHomeModal() {
     }
 
     async function handleCreatedTask() {
-        //submitBtn.disabled = true;
-        closeModal();
+        const title = taskTitle.value;
+        const description = taskInput.value;
+
+        if (title.length > 50) {
+            showToast(
+                "Ошибка",
+                "Заголовок не должен превышать 50 символов",
+                'error'
+            );
+            return;
+        }
+
+        if (title.length < 10 || description.length < 10) {
+            showToast("Ошибка", "Минимальная длина - 10 символов");
+            return;
+        }
+
+
+        closeModal()
         try {
-            const title = taskTitle.value.trim();
-            const description = taskInput.value.trim();
-
-            if (title.length > 50) {
-                showToast(
-                    "Ошибка",
-                    "Заголовок не должен превышать 50 символов",
-                    'error'
-                );
-                return;
-            }
-
-            if (title.length < 10 || description.length < 10) {
-                showToast( "Ошибка", "Минимальная длина - 10 символов");
-                return;
-            }
-
             await addUserTask({
-                taskTitle: title,
-                taskDescription: description
+                taskTitle: title.trim(),
+                taskDescription: description.trim()
             });
-            showToast("Ошибка","Минимальная длина - 10 символов");
+
+            showToast("Успех", "Задача успешно добавлена");
         } catch (error) {
             console.error("Ошибка:", error);
-        } finally {
-            //submitBtn.disabled = false
         }
     }
-
 
     modal.style.display = "flex";
     setTimeout(() => {

@@ -132,6 +132,7 @@ function openGridModal(taskElement) {
     }
 
     async function handleDelete() {
+        closeGridModal();
         try {
             await deleteTask({
                 Id: taskId
