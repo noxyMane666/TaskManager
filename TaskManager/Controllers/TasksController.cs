@@ -1,216 +1,84 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
-using TaskManager.Abstractions;
-using TaskManager.Data;
+using TaskManager.Core.Abstractions;
 using TaskManager.DTO;
-using TaskManager.Mappers;
 using TaskManager.Models;
 
 namespace TaskManager.Controllers
 {
     public class TasksController(
-        ILogger<TasksController> logger,
-        ITaskMapper taskMapper,
-        AppDbContext baseContext
+        ITaskService taskService
         ) : Controller
     {
-        private readonly ILogger<TasksController> _logger = logger;
-        private readonly ITaskMapper _taskMapper = taskMapper;
-        private readonly AppDbContext _baseContext = baseContext;
+        private readonly ITaskService _taskService;
 
         [HttpGet]
         public async Task<IActionResult> MyTasks(bool isClosed)
         {
-            try
-            {
-                var userTasks = await _baseContext.Tasks
-                    .Where(t => t.IsClosed == isClosed)
-                    .Select(t => new TaskItemDto
-                    {
-                        Id = t.Id,
-                        TaskTitle = t.TaskTitle,
-                        TaskDescription = t.TaskDescription,
-                        IsClosed = t.IsClosed
-                    })
-                    .ToListAsync();
+            var tasks = await _taskService.GetUserTasks(isClosed);
 
-                return View(userTasks);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex.Message, ex);
-                return StatusCode(500, "Данная страница сейчас недосупна. ");
-            }
+            return View(tasks);
         }
 
         [HttpPost]
         public async Task<IActionResult> AddTask([FromBody] TaskItemDto requestTask)
         {
-            try
+            if (!ModelState.IsValid)
             {
-                if (ModelState.IsValid)
-                {
-                    if (await _baseContext.Tasks.AnyAsync(t => t.Id == requestTask.Id))
-                    {
-                        return Json((
-                            success: false, 
-                            error: $"Задача с ID {requestTask.Id} уже есть"));
-                    }
-
-                    var taskModel = _taskMapper.ToModel(requestTask);
-                    _baseContext.Tasks.Add(taskModel);
-                    await _baseContext.SaveChangesAsync();
-
-                    return Ok(new { 
-                        success = true, 
-                        updatedTask = requestTask
-                    });
-                }
-                else
-                {
-                    var errors = ModelState
-                        .Where(e => e.Value?.Errors.Count > 0)
-                        .ToDictionary(
-                            kvp => kvp.Key,
-                            kvp => kvp.Value?.Errors.Select(e => e.ErrorMessage).ToArray()
-                        );
-
-                    _logger.LogWarning("Не удалось валидировать параметры: {@Errors}", errors);
-                    return BadRequest(new
-                    {
-                        success = false,
-                        errors = ModelState.Values
-                            .SelectMany(v => v.Errors)
-                            .Select(e => e.ErrorMessage)
-                    });
-                }
+                throw new Exception();
             }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, $"При создании задачи произошла ошибка: {ex.Message})");
-                return StatusCode(500, $"При создании задачи произошла ошибка: {ex.Message}");
-            }
+            
+            await _taskService.AddTask(requestTask);
+            
+            return Ok(new { 
+                success = true
+            });
         }
 
         [HttpPost]
         public async Task<IActionResult> UpdateTaskState([FromBody] UpdateTaskStateDto dto)
         {
-            try
+            if (!ModelState.IsValid)
             {
-                if (!ModelState.IsValid)
-                {
-                    var errors = ModelState
-                                    .Where(e => e.Value?.Errors.Count > 0)
-                                    .ToDictionary(
-                                        kvp => kvp.Key,
-                                        kvp => kvp.Value?.Errors.Select(e => e.ErrorMessage).ToArray()
-                                    );
-
-                    _logger.LogError("Ошибка валидации при добавлении задачи: {@Errors}", errors);
-                    return BadRequest(new
-                    {
-                        success = false,
-                        errors = ModelState.Values
-                            .SelectMany(v => v.Errors)
-                            .Select(e => e.ErrorMessage)
-                    });
-                }
-
-                var taskModel = await GetTaskById(dto.Id);
-
-                if (taskModel is null)
-                {
-                    return StatusCode(404, $"Задача с id {dto.Id} не найдена");
-                }
-
-                taskModel.ChangeTaskState(dto.IsClosed);
-                await _baseContext.SaveChangesAsync();
-
-                return Ok(new { 
-                    success = true, 
-                    updatedTask = dto 
-                });
+                throw new Exception();
             }
-            catch(Exception ex)
+
+            await _taskService.UpdateTaskState(dto);
+            
+            return Ok(new
             {
-                _logger.LogError(ex, "Ошибка обновления статуса задачи {dto.Id}", (dto.Id));
-                return StatusCode(500, $"При обновлении статуса задачи произошла ошибка: {ex.Message}");
-            }
+                success = true
+            });
         }
 
         [HttpPost]
         public async Task<IActionResult> UpdateTask([FromBody] UpdateTaskItemDto dto)
         {
-            try
+            if (!ModelState.IsValid)
             {
-                if (!ModelState.IsValid)
-                {
-                    var errors = ModelState
-                        .Where(e => e.Value?.Errors.Count > 0)
-                        .ToDictionary(
-                            kvp => kvp.Key,
-                            kvp => kvp.Value?.Errors.Select(e => e.ErrorMessage).ToArray()
-                        );
-
-                    _logger.LogError("Ошибка валидации при добавлении задачи: {@Errors}", errors);
-                    return BadRequest(new
-                    {
-                        success = false,
-                        errors = ModelState.Values
-                            .SelectMany(v => v.Errors)
-                            .Select(e => e.ErrorMessage)
-                    });
-                }
-
-                var taskModel = await GetTaskById(dto.Id);
-
-                if (taskModel is null)
-                {
-                    return StatusCode(404, $"Задача с id {dto.Id} не найдена");
-                }
-
-                _taskMapper.MapUpdates(taskModel, dto);
-                await _baseContext.SaveChangesAsync();
-                
-                return Ok(new { 
-                    success = true, 
-                    updatedTask = dto 
-                });
+                throw new Exception();
             }
-            catch(Exception ex)
-            {
-                _logger.LogError(ex, "Ошибка обновления задачи {dto.Id}", (dto.Id));
-                return StatusCode(500, $"При обновлении задачи произошла ошибка: {ex.Message}");
-            }
+            
+            await _taskService.UpdateTask(dto);
+            
+            return Ok(new { 
+                success = true
+            });
         }
 
         [HttpPost]
         public async Task<IActionResult> DeleteTask([FromBody] DeleteTaskItemDto dto )
         {
-            try
+            if (!ModelState.IsValid)
             {
-                var taskModel = await GetTaskById(dto.Id);
-               
-                if (taskModel is null)
-                {
-                    return StatusCode(404, $"Задача с id {dto.Id} не найдена");
-                }
-
-                Console.WriteLine(taskModel.Id);
-                _baseContext.Tasks.Remove(taskModel);
-                await _baseContext.SaveChangesAsync();
-                
-                return Ok(new
-                {
-                    success = true
-                });
+                throw new Exception();
             }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Ошибка удаления задачи {id}", (dto.Id));
-                return StatusCode(500, $"При удалении задачи произошла ошибкаЖ: {ex.Message}");
-            }
+            
+            await _taskService.DeleteTask(dto);
+            
+            return Ok(new { 
+                success = true
+            });
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
@@ -220,11 +88,6 @@ namespace TaskManager.Controllers
             {
                 RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier
             });
-        }
-
-        private async Task<TaskItem?> GetTaskById(int id)
-        {
-            return await _baseContext.Tasks.FindAsync(id);
         }
     }
 }

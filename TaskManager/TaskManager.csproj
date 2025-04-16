@@ -8,6 +8,13 @@
 
   <ItemGroup>
     <_ContentIncludedByDefault Remove="wwwroot\css\tasksGrid.css" />
+    <_ContentIncludedByDefault Remove="Web\Views\Home\Index.cshtml" />
+    <_ContentIncludedByDefault Remove="Web\Views\Shared\Error.cshtml" />
+    <_ContentIncludedByDefault Remove="Web\Views\Shared\_Layout.cshtml" />
+    <_ContentIncludedByDefault Remove="Web\Views\Shared\_ValidationScriptsPartial.cshtml" />
+    <_ContentIncludedByDefault Remove="Web\Views\Tasks\MyTasks.cshtml" />
+    <_ContentIncludedByDefault Remove="Web\Views\_ViewImports.cshtml" />
+    <_ContentIncludedByDefault Remove="Web\Views\_ViewStart.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -20,6 +27,20 @@
     <Content Update="appsettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <AdditionalFiles Include="Views\Home\Index.cshtml" />
+    <AdditionalFiles Include="Views\Shared\Error.cshtml" />
+    <AdditionalFiles Include="Views\Shared\_Layout.cshtml" />
+    <AdditionalFiles Include="Views\Shared\_ValidationScriptsPartial.cshtml" />
+    <AdditionalFiles Include="Views\Tasks\MyTasks.cshtml" />
+    <AdditionalFiles Include="Views\_ViewImports.cshtml" />
+    <AdditionalFiles Include="Views\_ViewStart.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Models\ResponseModels\" />
   </ItemGroup>
 
 </Project>

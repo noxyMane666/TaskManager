@@ -1,13 +1,14 @@
 ﻿using TaskManager.DTO;
 using TaskManager.Models;
 
-namespace TaskManager.Abstractions
+namespace TaskManager.Core.Abstractions
 {
     public interface ITaskMapper
     {
         public TaskItem ToModel(TaskItemDto dto);
         public TaskItemDto ToGetDto(TaskItem model);
-        public void MapUpdates(TaskItem model, UpdateTaskItemDto dto);
+        public TaskItem MapUpdates(TaskItem model, UpdateTaskItemDto dto);
+        public IEnumerable<TaskItemDto> ToDtoList(IEnumerable<TaskItem> models);
 
     }
 }
