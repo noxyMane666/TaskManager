@@ -7,7 +7,7 @@ namespace TaskManager.Data.Repositories;
 
 public class TaskRepository(AppDbContext appDbContext) : ITaskRepository
 {
-    private readonly AppDbContext _context;
+    private readonly AppDbContext _context = appDbContext;
     
     public async Task AddTaskAsync(TaskItem newTaskItem)
     {

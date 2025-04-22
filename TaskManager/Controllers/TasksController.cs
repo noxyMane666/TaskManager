@@ -10,7 +10,7 @@ namespace TaskManager.Controllers
         ITaskService taskService
         ) : Controller
     {
-        private readonly ITaskService _taskService;
+        private readonly ITaskService _taskService = taskService;
 
         [HttpGet]
         public async Task<IActionResult> MyTasks(bool isClosed)
@@ -22,12 +22,7 @@ namespace TaskManager.Controllers
 
         [HttpPost]
         public async Task<IActionResult> AddTask([FromBody] TaskItemDto requestTask)
-        {
-            if (!ModelState.IsValid)
-            {
-                throw new Exception();
-            }
-            
+        {            
             await _taskService.AddTask(requestTask);
             
             return Ok(new { 
@@ -38,11 +33,6 @@ namespace TaskManager.Controllers
         [HttpPost]
         public async Task<IActionResult> UpdateTaskState([FromBody] UpdateTaskStateDto dto)
         {
-            if (!ModelState.IsValid)
-            {
-                throw new Exception();
-            }
-
             await _taskService.UpdateTaskState(dto);
             
             return Ok(new
@@ -53,12 +43,7 @@ namespace TaskManager.Controllers
 
         [HttpPost]
         public async Task<IActionResult> UpdateTask([FromBody] UpdateTaskItemDto dto)
-        {
-            if (!ModelState.IsValid)
-            {
-                throw new Exception();
-            }
-            
+        {            
             await _taskService.UpdateTask(dto);
             
             return Ok(new { 
@@ -68,12 +53,7 @@ namespace TaskManager.Controllers
 
         [HttpPost]
         public async Task<IActionResult> DeleteTask([FromBody] DeleteTaskItemDto dto )
-        {
-            if (!ModelState.IsValid)
-            {
-                throw new Exception();
-            }
-            
+        {            
             await _taskService.DeleteTask(dto);
             
             return Ok(new { 

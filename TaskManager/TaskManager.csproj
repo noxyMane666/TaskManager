@@ -7,6 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Models\ResponseModels\**" />
+    <Content Remove="Models\ResponseModels\**" />
+    <EmbeddedResource Remove="Models\ResponseModels\**" />
+    <None Remove="Models\ResponseModels\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <_ContentIncludedByDefault Remove="wwwroot\css\tasksGrid.css" />
     <_ContentIncludedByDefault Remove="Web\Views\Home\Index.cshtml" />
     <_ContentIncludedByDefault Remove="Web\Views\Shared\Error.cshtml" />
@@ -18,6 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.15" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.4">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -45,10 +53,6 @@
     <AdditionalFiles Include="Views\Tasks\MyTasks.cshtml" />
     <AdditionalFiles Include="Views\_ViewImports.cshtml" />
     <AdditionalFiles Include="Views\_ViewStart.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Models\ResponseModels\" />
   </ItemGroup>
 
 </Project>

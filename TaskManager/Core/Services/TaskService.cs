@@ -1,7 +1,5 @@
 using TaskManager.Core.Abstractions;
-using TaskManager.Core.Abstractions;
 using TaskManager.DTO;
-using TaskManager.Models;
 
 namespace TaskManager.Core.Services;
 

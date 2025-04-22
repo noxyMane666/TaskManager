@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using TaskManager.Data;
@@ -5,11 +6,9 @@ using TaskManager.Models;
 
 namespace TaskManager.Controllers
 {
-    public class HomeController(ILogger<HomeController> logger, AppDbContext context) : Controller
+    public class HomeController() : Controller
     {
-        private readonly ILogger<HomeController> _logger = logger;
-        private readonly AppDbContext _context = context;
-
+        [Authorize]
         public IActionResult Index()
         {
             return View();

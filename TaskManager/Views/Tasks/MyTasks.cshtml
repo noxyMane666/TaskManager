@@ -7,30 +7,30 @@
     <meta charset="UTF-8" />
     <title>Менеджер задач</title>
     <link href="~/css/tasksGrid.css" rel="stylesheet" />
-    <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 </head>
 <body>
     <div id="gridContent">
         <div class="grid-container">
             @foreach (var task in Model)
             {
-                <div class="task" id="task-@task.Id">
-                    <div class="icon">
+                <div class="task" id="task-@task.Id" role="button" tabindex="0" data-task-id="@task.Id">
+                    <div class="icon" aria-hidden="true">
                         <i class="fas fa-check-circle"></i>
                     </div>
                     <div class="text-content">
                         <h3 class="title">@task.TaskTitle</h3>
-                        <div class="task-text" style="display: none">
+                        <div class="task-text hidden-content">
                             <textarea class="text">"@task.TaskDescription"</textarea>
                         </div>
                     </div>
                     <div class="task-status">
                         <label class="switch">
-                            <input type="checkbox"
-                                   data-task-id="@task.Id"
-                                   class="status-toggle"
-                            @(task.IsClosed ? "checked" : "") />
+                            <input type="checkbox" 
+                                   data-task-id="@task.Id" 
+                                   class="status-toggle" 
+                                   @(task.IsClosed ? "checked" : "") 
+                                   aria-label="@(task.IsClosed ? "Задача завершена" : "Задача активна")" />
                             <span class="slider round"></span>
                         </label>
                         <span>@(task.IsClosed ? "Завершена" : "Активна")</span>
@@ -39,26 +39,27 @@
             }
         </div>
     </div>
-    <div id="gridTaskModal" class="modal-wrapper" style="display: none">
+
+    <div id="gridTaskModal" class="modal-wrapper">
         <div class="modal-container">
             <div class="service modal-service">
-                <div class="icon"><i class="fas fa-check-circle"></i></div>
+                <div class="icon" aria-hidden="true"><i class="fas fa-check-circle"></i></div>
                 <div class="text-content">
                     <h3 class="title">Карточка задачи</h3>
                     <div class="modal-inputs">
-                        <label class="input-label" for="taskTitle">Описание задачи</label>
-                        <input type="text" id="gridTaskTitle" class="modal-input"/>
-                        <label class="input-label" for="taskInput">Текст задачи</label>
-                        <textarea id="gridTaskInput" class="modal-textarea"></textarea>
+                        <label class="input-label" for="gridTaskTitle">Описание задачи</label>
+                        <input type="text" id="gridTaskTitle" class="modal-input" required />
+                        <label class="input-label" for="gridTaskInput">Текст задачи</label>
+                        <textarea id="gridTaskInput" class="modal-textarea" required></textarea>
                     </div>
                     <div class="modal-actions">
-                        <button id="cardCancelBtn" class="btn-cancel">
+                        <button id="cardCancelBtn" class="app-button btn-cancel" aria-label="Отменить">
                             <i class="fas fa-times"></i>
                         </button>
-                        <button id="cardDeleteBtn" class="btn-delete">
+                        <button id="cardDeleteBtn" class="app-button btn-delete" aria-label="Удалить задачу">
                             <i class="fas fa-trash-alt"></i>
                         </button>
-                        <button id="cardSubmitBtn" class="btn-submit">
+                        <button id="cardSubmitBtn" class="app-button btn-submit" aria-label="Сохранить изменения">
                             <i class="fas fa-check"></i>
                         </button>
                     </div>
@@ -66,18 +67,15 @@
             </div>
         </div>
     </div>
-    <div id="toastNotification"
-         class="toast position-fixed"
-         style="display: none">
+
+    <div id="toastNotification" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
         <div class="toast-header">
             <strong class="me-auto" id="toastTitle">Уведомление</strong>
-            <button type="button"
-                    class="btn-close"
-                    data-bs-dismiss="toast"
-                    aria-label="Close"></button>
+            <button type="button" class="btn-close" data-dismiss="toast" aria-label="Закрыть"></button>
         </div>
         <div class="toast-body" id="toastMessage"></div>
     </div>
+
     <script src="~/js/grid.js" asp-append-version="true"></script>
 </body>
 </html>

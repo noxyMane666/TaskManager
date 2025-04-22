@@ -131,6 +131,19 @@ function openHomeModal() {
 
 function initHomeListeners() {
     const buttons = document.querySelectorAll(".action-btn");
+    const menuButton = document.getElementById("mainMenu");
+    const menu = document.getElementById("dropdownMainMenu");
+
+    menuButton.addEventListener("click", () => {
+        menu.classList.toggle("hidden");
+    });
+
+    document.addEventListener("click", (e) => {
+        if (!menuButton.contains(e.target) && !menu.contains(e.target)) {
+            menu.classList.add("hidden");
+        }
+    });
+
     buttons.forEach((button) => {
         button.addEventListener("click", function () {
             switch (this.id) {
