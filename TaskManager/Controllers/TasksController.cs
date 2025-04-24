@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using System.Security.Claims;
 using TaskManager.Core.Abstractions;
 using TaskManager.DTO;
 using TaskManager.Models;
@@ -14,16 +15,16 @@ namespace TaskManager.Controllers
 
         [HttpGet]
         public async Task<IActionResult> MyTasks(bool isClosed)
-        {
-            var tasks = await _taskService.GetUserTasks(isClosed);
+        {;
+            var tasks = await _taskService.GetUserTasks(isClosed, User);
 
             return View(tasks);
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddTask([FromBody] TaskItemDto requestTask)
-        {            
-            await _taskService.AddTask(requestTask);
+        public async Task<IActionResult> AddTask([FromBody] TaskItemDto dto)
+        {
+            await _taskService.AddTask(dto, User);
             
             return Ok(new { 
                 success = true

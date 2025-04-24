@@ -22,7 +22,7 @@ function initTabs() {
             });
 
             forms.forEach(form => {
-                const isActive = (tabName === 'login' && form.action.includes('Login')) ||
+                const isActive = (tabName === 'login' && form.action.includes('SignIn')) ||
                     (tabName === 'register' && form.action.includes('Register'));
                 form.classList.toggle('active', isActive);
             });
@@ -37,7 +37,7 @@ function initTabs() {
 }
 
 function initStepButtons() {
-    document.querySelectorAll('.next-step').forEach(button => {
+    document.querySelectorAll('.btn-next-step').forEach(button => {
         button.addEventListener('click', function () {
             const currentStep = this.closest('.form-step');
             const nextStep = currentStep.nextElementSibling;
@@ -49,7 +49,7 @@ function initStepButtons() {
         });
     });
 
-    document.querySelectorAll('.prev-step').forEach(button => {
+    document.querySelectorAll('.btn-prev-step').forEach(button => {
         button.addEventListener('click', function () {
             const currentStep = this.closest('.form-step');
             const prevStep = currentStep.previousElementSibling;

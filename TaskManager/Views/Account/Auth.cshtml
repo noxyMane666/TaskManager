@@ -25,21 +25,25 @@
                 <button type="button" class="auth-tab" data-tab="register">Регистрация</button>
                 <div class="active-indicator"></div>
             </div>
-                <form asp-controller="Account" asp-action="SignIn" method="post" class="auth-form active">
+            <form asp-controller="Account" asp-action="SignIn" method="post" class="auth-form active">
                 <div asp-validation-summary="All" class="auth-errors"></div>
                 <div class="form-group">
                     <label asp-for="SignInUser.Email">Email</label>
                     <input asp-for="SignInUser.Email" class="modal-input"/>
-                        <span asp-validation-for="SignInUser.Email" class="validation-message"></span>
+                    <span asp-validation-for="SignInUser.Email" class="validation-message"></span>
                 </div>
                 <div class="form-group">
                     <label asp-for="SignInUser.Password">Пароль</label>
-                    <input asp-for="SignInUser.Password" class="modal-input"/>
+                     <input asp-for="SignInUser.Password" class="modal-input" type="password" />
                     <span asp-validation-for="SignInUser.Password" class="validation-password"></span>
                 </div>
-                <button type="submit" class="app-button auth-button">Войти</button>
+                <div class="step-buttons">
+                    <button type="submit" class="app-button auth-button btn-submit">
+                        <i class="fas fa-check"></i>
+                    </button>
+                </div>
             </form>
-                <form asp-controller="Account"  asp-action="Register" method="post" class="auth-form">
+            <form asp-controller="Account"  asp-action="Register" method="post" class="auth-form">
                 <div asp-validation-summary="All" class="auth-errors"></div>
                 <div class="form-step active" data-step="1">
                     <div class="form-group">
@@ -49,20 +53,27 @@
                     </div>
                     <div class="form-group">
                         <label asp-for="RegisterUser.Password">Пароль</label>
-                        <input asp-for="RegisterUser.Password" class="modal-input" />
-                            <span asp-validation-for="RegisterUser.Password" class="validation-password"></span>
+                        <input asp-for="RegisterUser.Password" class="modal-input" type="password"/>
+                        <span asp-validation-for="RegisterUser.Password" class="validation-password"></span>
                     </div>
-                    <button type="button" class="app-button auth-button next-step">Далее</button>
+                    <div class="step-buttons">
+                        <button type="button" class="app-button auth-button btn-next-step">
+                            <i class="fa fa-arrow-right"></i>
+                        </button>
+                    </div>
                 </div>
                 <div class="form-step" data-step="2">
                     <div class="form-group">
                         <label asp-for="RegisterUser.UserName">Никнейм</label>
                         <input asp-for="RegisterUser.UserName" class="modal-input"/>
-                        <span asp-validation-for="RegisterUser.UserName" class="text-danger"></span>
                     </div>
                     <div class="step-buttons">
-                        <button type="button" class="app-button auth-button prev-step">Назад</button>
-                        <button type="submit" class="app-button btn-submit auth-button">Зарегистрироваться</button>
+                        <button type="button" class="app-button auth-button btn-prev-step">
+                            <i class="fa fa-arrow-left"></i>
+                        </button>
+                        <button type="submit" class="app-button auth-button btn-submit">
+                            <i class="fa fa-check"></i>
+                        </button>
                     </div>
                 </div>
             </form>

@@ -1,3 +1,5 @@
+using TaskManager.Exceptions;
+
 namespace TaskManager.Middleware;
 
 public class ExceptionHandlingMiddleware(RequestDelegate next, ILogger<ExceptionHandlingMiddleware> logger)
@@ -7,6 +9,12 @@ public class ExceptionHandlingMiddleware(RequestDelegate next, ILogger<Exception
         try
         {
             await next(context);
+        }
+        catch (TaskNotFoundException ex)
+        {
+            logger.LogError(ex, "Task not found");
+            context.Response.StatusCode = 404;
+            await context.Response.WriteAsJsonAsync(new { error = ex.Message });
         }
         catch (Exception ex)
         {

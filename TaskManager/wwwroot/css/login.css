@@ -1,14 +1,4 @@
-﻿:root {
-    --primary: #4361ee;
-    --primary-hover: #3a56d4;
-    --error: #f72585;
-    --text: #2b2d42;
-    --text-light: #8d99ae;
-    --border: #e9ecef;
-    --bg: #f8f9fa;
-}
-
-#content {
+﻿#content {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -27,6 +17,7 @@
 .auth-card {
     background: white;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    border-radius: var(--radius-md);
     padding: 40px;
     position: relative;
     overflow: hidden;
@@ -104,12 +95,7 @@
 
 
 .modal-input {
-    width: 100%;
-    border: 1px solid var(--border);
-    border-radius: var(--radius-sm);
-    font-size: 15px;
-    color: var(--text);
-    background: transparent;
+    margin-bottom: 8px !important;
 }
 
     .modal-input:focus {
@@ -155,35 +141,9 @@
 }
 
 .auth-button {
-    width: 100%;
-    max-width: 240px;
-    margin: 12px auto 0;
-    padding: 14px 20px;
-    background: var(--primary);
-    color: white;
-    border: none;
-    font-size: 15px;
-    font-weight: 600;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
+    width: 45px;
+    height: 45px;
 }
-
-    .auth-button:hover {
-        background: var(--primary-hover);
-        transform: translateY(-1px);
-    }
-
-    .auth-button:active {
-        transform: translateY(0);
-    }
-
-    .auth-button svg {
-        width: 18px;
-        height: 18px;
-    }
 
 .form-step {
     display: none;
@@ -193,18 +153,12 @@
         display: block;
     }
 
-
-
+.submit-area,
 .step-buttons {
     display: flex;
     gap: 10px;
     justify-content: center;
 }
-
-    .step-buttons .auth-button {
-        flex: 1;
-        max-width: none;
-    }
 
 @media (max-width: 480px) {
     .auth-card {

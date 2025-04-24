@@ -6,5 +6,6 @@ namespace TaskManager.DTO
     {
         [Required(ErrorMessage = "Номер задачи обязателен")]
         public int Id { get; set; }
+        public int UserId { get; set; }
     }
 }

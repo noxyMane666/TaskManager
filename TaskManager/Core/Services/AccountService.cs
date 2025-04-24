@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using System.Security.Claims;
 using TaskManager.Core.Abstractions;
+using TaskManager.Exceptions;
 using TaskManager.Models;
 
 namespace TaskManager.Core.Services
@@ -32,6 +34,13 @@ namespace TaskManager.Core.Services
             }
 
             return await _signInManager.PasswordSignInAsync(user.UserName, password, false, false);
+        }
+
+        public async Task<int> GetUserIdAsync(ClaimsPrincipal claims)
+        {
+            var user = await _userManager.GetUserAsync(claims);
+
+            return user is null ? throw new UserNotFoundException("Пользователь не найден") : user.Id;
         }
 
         public Task LogOutAsync()

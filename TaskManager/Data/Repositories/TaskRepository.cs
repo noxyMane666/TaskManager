@@ -20,9 +20,13 @@ public class TaskRepository(AppDbContext appDbContext) : ITaskRepository
         return await _context.Tasks.FindAsync(taskId);
     }
 
-    public async Task<IEnumerable<TaskItem>> GetTasksAsync(bool isClosed)
+    public async Task<IEnumerable<TaskItem>> GetTasksAsync(bool isClosed, int userId)
     {
-        return await _context.Tasks.Where(task => task.IsClosed == isClosed).ToListAsync();
+        return await _context.Tasks
+            .Where(task => task.IsClosed == isClosed)
+            .Where(task => task.UserId == userId)
+            .OrderBy(task => task.CreatedDate)
+            .ToListAsync();
     }
 
     public async Task UpdateTaskAsync(TaskItem taskItem)

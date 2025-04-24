@@ -31,6 +31,10 @@ namespace TaskManager.Controllers
                     ModelState.AddModelError(string.Empty, error.Description);
                 }
 
+                dto.Email = string.Empty;
+                dto.Password = string.Empty;
+                dto.UserName = string.Empty;
+
                 return View("Auth", new AuthModel
                 {
                     RegisterUser = dto,

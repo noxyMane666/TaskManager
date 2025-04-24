@@ -7,6 +7,7 @@ using TaskManager.Core.Mappers;
 using TaskManager.Core.Services;
 using TaskManager.Data.Repositories;
 using TaskManager.Models;
+using TaskManager.Middleware;
 
 namespace TaskManager
 {
@@ -21,7 +22,7 @@ namespace TaskManager
                 options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"))
             );
 
-            builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+            builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
             {
                 options.Password.RequireDigit = true;
                 options.Password.RequiredLength = 8;
@@ -54,13 +55,14 @@ namespace TaskManager
                 app.UseHsts();
             }
 
+            app.UseMiddleware<ExceptionHandlingMiddleware>();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
             app.UseRouting();
 
             app.UseAuthorization();
-
+      
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{Id?}");

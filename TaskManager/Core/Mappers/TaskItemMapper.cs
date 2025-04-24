@@ -7,11 +7,12 @@ namespace TaskManager.Core.Mappers
 {
     public class TaskItemMapper : ITaskMapper
     {
-        public TaskItem ToModel (TaskItemDto dto)
+        public TaskItem ToModel (TaskItemDto dto, int userId)
         {
             return new TaskItem
             {
                 Id = dto.Id,
+                UserId = userId,
                 TaskTitle = dto.TaskTitle,
                 TaskDescription = dto.TaskDescription,
                 IsClosed = dto.IsClosed
@@ -45,7 +46,7 @@ namespace TaskManager.Core.Mappers
                     modelProperty.SetValue(model, dtoValue);
                 }
             }
-            
+
             return model;
         }
 

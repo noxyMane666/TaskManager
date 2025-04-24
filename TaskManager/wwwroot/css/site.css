@@ -7,6 +7,7 @@
     --text-light: #7f8c8d;
     --border: #eee;
     --bg: #f5f7fa;
+    --error: #f72585;
     --shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
     --shadow-hover: 0 10px 25px rgba(0, 0, 0, 0.1);
     --radius-sm: 6px;
@@ -118,7 +119,11 @@ body {
     background: var(--danger);
 }
 
-.action-btn:hover, .btn-submit:hover, .btn-menu:hover {
+.action-btn:hover,
+.btn-submit:hover,
+.btn-menu:hover,
+.btn-next-step:hover,
+.btn-prev-step:hover {
     background: var(--primary-hover);
     transform: scale(1.1);
 }
@@ -258,17 +263,13 @@ body {
     top: 50px;
     right: 0;
     background-color: white;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-hover);
     z-index: 100;
-    padding: 10px;
-    width: 150px;
+    padding: 10px 0;
+    width: 220px;
 }
-
-    .dropdown-main-menu.hidden {
-        display: none;
-    }
 
     .dropdown-main-menu ul {
         list-style: none;
@@ -277,18 +278,54 @@ body {
     }
 
     .dropdown-main-menu li {
-        padding: 8px;
+        padding: 0;
+        margin: 0;
     }
 
-        .dropdown-main-menu li a {
-            text-decoration: none;
-            color: #333;
-            display: block;
+    .dropdown-main-menu .menu-item {
+        text-decoration: none;
+        color: var(--text);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 16px;
+        font-size: 0.95rem;
+        transition: var(--transition);
+    }
+
+        .dropdown-main-menu .menu-item:hover {
+            background-color: rgba(74, 108, 247, 0.1);
+            color: var(--primary);
         }
 
-            .dropdown-main-menu li a:hover {
-                background-color: #f0f0f0;
-            }
+        .dropdown-main-menu .menu-item i {
+            width: 20px;
+            text-align: center;
+            font-size: 16px;
+        }
+
+.menu-divider {
+    height: 1px;
+    background-color: var(--border);
+    margin: 8px 0;
+}
+
+.logout-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    text-align: left;
+    font-family: inherit;
+    font-size: inherit;
+    color: inherit;
+    padding: 0;
+}
+
+    .logout-button:hover {
+        background: none;
+        color: var(--primary);
+    }
 
 
 .btn-close {

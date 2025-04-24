@@ -42,9 +42,20 @@
 </div>
 
 <div id="dropdownMainMenu" class="dropdown-main-menu hidden">
-    <form asp-controller="Account" asp-action="LogOut" method="post">
-        <button type="submit" class="logout-button">Выйти</button>
-    </form>
+    <ul>
+        <li><a href="#" class="menu-item"><i class="fas fa-user"></i> Профиль</a></li>
+        <li><a href="#" class="menu-item"><i class="fas fa-cog"></i> Настройки</a></li>
+        <li><a href="#" class="menu-item"><i class="fas fa-question-circle"></i> Помощь</a></li>
+        <li><a href="#" class="menu-item"><i class="fas fa-info-circle"></i> О программе</a></li>
+        <li class="menu-divider"></li>
+        <li>
+            <form asp-controller="Account" asp-action="LogOut" method="post">
+                <button type="submit" class="logout-button menu-item">
+                    <i class="fas fa-sign-out-alt"></i> Выйти
+                </button>
+            </form>
+        </li>
+    </ul>
 </div>
 
 <div id="taskModal" class="modal-wrapper">
